@@ -68,17 +68,17 @@ namespace correlations {
         _tN.resize(doNested ? maxN-1 : 0);
         _s = Stopwatch::create();
         switch (mode) {
-        case 0: _c = new correlations::recursive::FromQVector(_q); break;
-        case 1: _c = new correlations::recurrence::FromQVector(_q); break;
-        case 2: _c = new correlations::closed::FromQVector(_q);
+        case RECURSIVE:  _c = new correlations::recursive::FromQVector(_q); break;
+        case RECURRENCE: _c = new correlations::recurrence::FromQVector(_q); break;
+        case CLOSED:     _c = new correlations::closed::FromQVector(_q); break;
         }
         if (doNested)
 	  switch (mode) {
-	  case 0:
-	  case 1:
+	  case RECURSIVE:
+	  case RECURRENCE:
 	    _n = new correlations::recursive::NestedLoops(_phis,_weights,true);
 	    break;
-	  case 2:
+	  case CLOSED:
 	    _n = new correlations::NestedLoops(_phis,_weights,true);
 	    break;
         }
