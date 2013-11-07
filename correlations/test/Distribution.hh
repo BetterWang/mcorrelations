@@ -4,10 +4,10 @@
  * @file   correlations/test/Distribution.hh
  * @author Christian Holm Christensen <cholm@nbi.dk>
  * @date   Thu Oct 24 23:45:40 2013
- * 
+ *
  * @brief  A phi distribution
- * 
- * Copyright (c) 2013 Christian Holm Christensen 
+ *
+ * Copyright (c) 2013 Christian Holm Christensen
  */
 #include <correlations/test/Random.hh>
 #include <correlations/Types.hh>
@@ -17,155 +17,155 @@
 namespace correlations {
   namespace test {
     //====================================================================
-    /** 
-     * The phi distribution 
+    /**
+     * The phi distribution
      *
      * @f[
      *  f(\phi) = 1 + 2\sum_{i=1}^{6} \cos(i(\phi-\Phi_R))
      * @f]
      *
-     * The indefinite integral is given by 
+     * The indefinite integral is given by
      * @f[
      * \int d\phi f(\phi) = 2\pi + 2 \sum_{i=1}^{6} \frac{\sin(i(\phi-\Phi_R))}{i}
      * @f]
-     * 
+     *
      * or for the definte integral over @f$[a,b]@f$
      * @f[
-     * \int_a^b f(\phi) = (b-a) + 2 \sum_{i=1}^6 
+     * \int_a^b f(\phi) = (b-a) + 2 \sum_{i=1}^6
      *   \frac{\sin(i(b-\Phi_R))-\sin(i(a-\Phi_R))}{i}
      * @f]
-     * 
-     * @headerfile "" <correlations/test/Distribution.hh> 
+     *
+     * @headerfile "" <correlations/test/Distribution.hh>
      */
     struct Distribution
     {
-      static Real func(Real* xx, 
+      static Real func(Real* xx,
 		       Real* pp)
       {
 	Real phi = xx[0];
 	Real psi = pp[0];
 	Real ret = 1;
-	for (Size i = 1; i < 7; i++) 
+	for (Size i = 1; i < 7; i++)
 	  ret += 2 * pp[i] * cos(i * (phi-psi));
 	return ret;
       }
 
-      /** 
-       * Constructor 
+      /**
+       * Constructor
        */
-      Distribution() 
-	: fNpx(100),
-	  fIntegral(fNpx+1), 
-	  fAlpha(fNpx), 
-	  fBeta(fNpx), 
-	  fGamma(fNpx)
+      Distribution()
+	: _npx(100),
+	  _integral(_npx+1),
+	  _alpha(_npx),
+	  _beta(_npx),
+	  _gamma(_npx)
       {
-	fV[0] = 0;    // psi
-	fV[1] = 0.01; // v_1
-	fV[2] = 0.05; // v_2
-	fV[3] = 0.03; // v_3
-	fV[4] = 0.02; // v_4
-	fV[5] = 0.01; // v_5
-	fV[6] = 0.01; // v_6;
+	_v[0] = 0;    // psi
+	_v[1] = 0.01; // v_1
+	_v[2] = 0.05; // v_2
+	_v[3] = 0.03; // v_3
+	_v[4] = 0.02; // v_4
+	_v[5] = 0.01; // v_5
+	_v[6] = 0.01; // v_6;
       }
-      /** 
-       * Set-up for sampling 
+      /**
+       * Set-up for sampling
        */
-      void Setup(Real psi)
+      void setup(Real psi)
       {
-	fV[0] = psi;
-	Real dx    = 2*M_PI / fNpx;
-	fIntegral[0] = 0;
-	// Calculate cumulated integral in bins 
-	for (Size i = 0; i < fNpx; i++) {
-	  Real intg = Integral(i*dx, (i+1)*dx);
-	  fIntegral[i+1] = fIntegral[i] + intg;
+	_v[0] = psi;
+	Real dx    = 2*M_PI / _npx;
+	_integral[0] = 0;
+	// Calculate cumulated integral in bins
+	for (Size i = 0; i < _npx; i++) {
+	  Real intg = integral(i*dx, (i+1)*dx);
+	  _integral[i+1] = _integral[i] + intg;
 	}
-	// Normalize intergral 
-	Real full = fIntegral[fNpx];
-	for (Size i = 0; i <= fNpx; i++) 
-	  fIntegral[i] /= full;
-	// Approximate intergal r in each bin with a parabolla 
-	// 
+	// Normalize intergral
+	Real full = _integral[_npx];
+	for (Size i = 0; i <= _npx; i++)
+	  _integral[i] /= full;
+	// Approximate intergal r in each bin with a parabolla
+	//
 	//  x = alpha + beta * r + gamma * r * r;
-	for (Size i = 0; i <= fNpx; i++) {
-	  Real r2 = fIntegral[i+1] - fIntegral[i];     // End point
-	  Real r1 = Integral(i*dx, (i+.5)*dx) / full;  // Mid point
+	for (Size i = 0; i <= _npx; i++) {
+	  Real r2 = _integral[i+1] - _integral[i];     // End point
+	  Real r1 = integral(i*dx, (i+.5)*dx) / full;  // Mid point
 	  Real r3 = 2 * r2 - 3 * r1;
-	  fGamma[i] = 2 * (fabs(r3) > 1e-8) ? r3 / (dx*dx) : 0;
-	  fBeta[i]  = r2 / dx - fGamma[i] * dx / 2;
-	  fAlpha[i] = i * dx;
-	}    
+	  _gamma[i] = 2 * (fabs(r3) > 1e-8) ? r3 / (dx*dx) : 0;
+	  _beta[i]  = r2 / dx - _gamma[i] * dx / 2;
+	  _alpha[i] = i * dx;
+	}
       }
-      /** 
+      /**
        * Evaluate the function
-       * 
-       * @param phi Where to evaluate 
-       * 
+       *
+       * @param phi Where to evaluate
+       *
        * @return The function evaluated at @a phi
        */
-      Real Eval(Real phi) const
+      Real eval(Real phi) const
       {
-	Real* pp = const_cast<Real*>(&(fV[0]));
+	Real* pp = const_cast<Real*>(&(_v[0]));
 	return func(&phi, pp);
       }
-      /** 
-       * Evaluate the integral of the function from @a a to @a b 
-       * 
-       * @param a Lower limit 
-       * @param b Upper limit 
-       * 
-       * @return Integral from @a a to @a b 
+      /**
+       * Evaluate the integral of the function from @a a to @a b
+       *
+       * @param a Lower limit
+       * @param b Upper limit
+       *
+       * @return Integral from @a a to @a b
        */
-      Real Integral(Real a, 
+      Real integral(Real a,
 		    Real b) const
       {
 	Real ret = (b-a);
-	Real psi = fV[0];
-	for (Size i = 1; i < 7; i++) 
-	  ret += 2 * fV[i] * (sin(i*(b-psi))-sin(i*(a-psi)));
+	Real psi = _v[0];
+	for (Size i = 1; i < 7; i++)
+	  ret += 2 * _v[i] * (sin(i*(b-psi))-sin(i*(a-psi)));
 	return ret;
       }
-      /** 
+      /**
        * Draw a random value from the function considered a probability
        * distribution.
-       * 
+       *
        * @return A random number distributed according to the function
        */
-      Real Random() const
+      Real random() const
       {
-	Real        rnd   = Random::AsReal(0,1);
-	const Real* first = &(fIntegral[0]);
-	const Real* last  = first + fIntegral.size();
+	Real        rnd   = Random::asReal(0,1);
+	const Real* first = &(_integral[0]);
+	const Real* last  = first + _integral.size();
 	const Real* ptr   = std::lower_bound(first, last, rnd);
 	Size        bin   = 0;
 	if (ptr != (last) && (*ptr == rnd)) bin = (ptr-first);
 	else                                bin = (ptr-first-1);
-	Real  rr    = rnd - fIntegral[bin];
-    
+	Real  rr    = rnd - _integral[bin];
+
 	Real yy = 0;
-	Real g  = fGamma[bin];
-	Real b  = fBeta[bin];
-	Real a  = fAlpha[bin];
-	if (g != 0) 
+	Real g  = _gamma[bin];
+	Real b  = _beta[bin];
+	Real a  = _alpha[bin];
+	if (g != 0)
 	  yy = (-b + sqrt(b*b+2*g*rr))/g;
-	else 
+	else
 	  yy = rr / b;
 	Real x = a + yy;
 	return x;
       }
       /** Reaction plane and Flow strength */
-      Real fV[7];
+      Real _v[7];
       /** Number of points to evaluate the function at */
-      Size fNpx;
+      Size _npx;
       /** Integral of function in steps */
-      RealVector fIntegral;
+      RealVector _integral;
       /** Parameterization of integral */
-      RealVector fAlpha;
+      RealVector _alpha;
       /** Parameterization of integral */
-      RealVector fBeta;
+      RealVector _beta;
       /** Parameterization of integral */
-      RealVector fGamma;
+      RealVector _gamma;
     };
   }
 }

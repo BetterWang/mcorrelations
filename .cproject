@@ -3,6 +3,9 @@
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="cdt.managedbuild.toolchain.gnu.base.476436774">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.base.476436774" moduleId="org.eclipse.cdt.core.settings" name="Default">
+				<macros>
+					<stringMacro name="ROOTSYS" type="VALUE_TEXT" value="/opt/alice/root/trunk"/>
+				</macros>
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -38,6 +41,22 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="cdt.managedbuild.toolchain.gnu.base.476436774.615164497" name="/" resourcePath="correlations/test">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.base.1685295771" name="cdt.managedbuild.toolchain.gnu.base" superClass="cdt.managedbuild.toolchain.gnu.base" unusedChildren="">
+							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1163978279" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.242386719"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1025423339" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base.368376961">
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.718877528" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.1588345338" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base.1958344572">
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1303818121" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.base.1330828675" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base.503877193"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.446140731" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base.1651848601"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.base.812955070" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base.1530832100">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1714053869" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -47,6 +66,7 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.base.476436774.2811346" moduleId="org.eclipse.cdt.core.settings" name="Full">
 				<macros>
 					<stringMacro name="FULL" type="VALUE_TEXT" value="yes"/>
+					<stringMacro name="ROOTSYS" type="VALUE_TEXT" value="/opt/alice/root/trunk"/>
 				</macros>
 				<externalSettings/>
 				<extensions>
@@ -83,6 +103,22 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="cdt.managedbuild.toolchain.gnu.base.476436774.2811346.35954511" name="/" resourcePath="correlations/test">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.base.52122580" name="cdt.managedbuild.toolchain.gnu.base" superClass="cdt.managedbuild.toolchain.gnu.base" unusedChildren="">
+							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1295431860" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.251278738"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.723712125" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base.1854582374">
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.760133359" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.2081561616" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base.50977410">
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1196527326" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.base.1811906800" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base.292598951"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.1016248514" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base.1719617892"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.base.842856835" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base.1570864868">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.983217667" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -93,15 +129,6 @@
 		<project id="correlations.null.308105597" name="correlations"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.476436774;cdt.managedbuild.toolchain.gnu.base.476436774.928419912;cdt.managedbuild.tool.gnu.c.compiler.base.1958344572;cdt.managedbuild.tool.gnu.c.compiler.input.572620027">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.476436774;cdt.managedbuild.toolchain.gnu.base.476436774.928419912;cdt.managedbuild.tool.gnu.cpp.compiler.base.368376961;cdt.managedbuild.tool.gnu.cpp.compiler.input.1478520150">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Default">
 			<resource resourceType="PROJECT" workspacePath="/correlations"/>
@@ -153,5 +180,20 @@
 				<runAllBuilders>true</runAllBuilders>
 			</target>
 		</buildTargets>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.476436774.2811346;cdt.managedbuild.toolchain.gnu.base.476436774.2811346.;cdt.managedbuild.tool.gnu.cpp.compiler.base.1854582374;cdt.managedbuild.tool.gnu.cpp.compiler.input.497343917">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.476436774;cdt.managedbuild.toolchain.gnu.base.476436774.928419912;cdt.managedbuild.tool.gnu.c.compiler.base.1958344572;cdt.managedbuild.tool.gnu.c.compiler.input.572620027">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.476436774.2811346;cdt.managedbuild.toolchain.gnu.base.476436774.2811346.;cdt.managedbuild.tool.gnu.c.compiler.base.50977410;cdt.managedbuild.tool.gnu.c.compiler.input.286040789">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.476436774;cdt.managedbuild.toolchain.gnu.base.476436774.928419912;cdt.managedbuild.tool.gnu.cpp.compiler.base.368376961;cdt.managedbuild.tool.gnu.cpp.compiler.input.1478520150">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
 	</storageModule>
 </cproject>

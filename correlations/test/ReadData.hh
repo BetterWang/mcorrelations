@@ -43,7 +43,7 @@ namespace correlations {
        * @param input Stream to read from
        */
       ReadData(std::istream& input)
-	: fInput(input), fPhiR(0)
+	: _input(input), _phiR(0)
       {
       }
       virtual ~ReadData() {}
@@ -56,15 +56,15 @@ namespace correlations {
        *
        * @return true if more events to process
        */
-      virtual bool Event(QVector& q,
+      virtual bool event(QVector& q,
 			 RealVector& phis,
 			 RealVector& weights)
       {
-	if (fInput.eof()) return false;
+	if (_input.eof()) return false;
 
 	std::string l;
 	do {
-	  std::getline(fInput, l);
+	  std::getline(_input, l);
 	  if (l.empty()) return false;
 	  if (l[0] == '#') continue;
 	  break;
@@ -80,7 +80,7 @@ namespace correlations {
 
 	Size mult = 0;
 	Size ev   = 0;
-	s1 >> mult >> ev >> fPhiR;
+	s1 >> mult >> ev >> _phiR;
 
 	if (mult <= 0)
 	  // Bad multiplicity
@@ -89,7 +89,7 @@ namespace correlations {
 	phis.resize(mult);
 	weights.resize(mult);
 	do {
-	  std::getline(fInput, l);
+	  std::getline(_input, l);
 	  if (l.empty()) return false;
 	  if (l[0] == '#') continue;
 
@@ -113,10 +113,10 @@ namespace correlations {
 
 	return true;
       }
-      Real PhiR() const {return fPhiR; }
+      Real phiR() const {return _phiR; }
     protected:
-      std::istream& fInput;
-      Real fPhiR;
+      std::istream& _input;
+      Real _phiR;
     };
   }
 }

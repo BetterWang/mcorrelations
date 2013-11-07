@@ -95,7 +95,7 @@ Test(Char_t      mode=true,
 
   // --- Event loop --------------------------------------------------
   UShort_t event = 0;
-  while (r.Event(q, phis, weights)) {
+  while (r.event(q, phis, weights)) {
     printf("Event # %4d  %4lu particles ", event++, phis.size());
     for (UShort_t i = 0; i < nQ; i++) {
       UShort_t n = i + 2;
@@ -107,7 +107,7 @@ Test(Char_t      mode=true,
       timing->Fill(n+.5, timer.CpuTime());
     }
     for (UShort_t i = 0; i < phis.size(); i++) {
-      Double_t phi = phis[i] - r.PhiR();
+      Double_t phi = phis[i] - r.phiR();
       if (phi < 0) phi += TMath::TwoPi();
       phiDist->Fill(phi);
     }

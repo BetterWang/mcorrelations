@@ -3,20 +3,23 @@
 NAME		:= correlations
 VERSION		:= 0.2
 
-MAXH		:= 6
-
 ROOT		:= root
 ROOTFLAGS	:= -l -b -q 
 ROOTCFLAGS	:= $(shell root-config --cflags)
 ROOTLIBS	:= $(shell root-config --libs)
-CXX		:= g++ -c 
+CXX			:= g++ -c 
 CXXFLAGS	:= -Wall -Wextra -Weffc++ -g -O 
 CXXFLAGS	:= -Wall -Wextra -Weffc++ -ansi -pedantic -g -O3
-ifneq ($(FULL),)
-CPPFLAGS	:= -I. -DCORRELATIONS_CLOSED_ENABLE_QC8 \
-		       -DCORRELATIONS_CLOSED_ENABLE_QC7
-else		       
 CPPFLAGS	:= -I.
+ifneq ($(FULL),)
+USE7		:= yes
+USE8		:= yes
+endif
+ifneq ($(USE8),)
+CPPFLAGS	+= -DCORRELATIONS_CLOSED_ENABLE_U8
+endif
+ifneq ($(USE7),)   
+CPPFLAGS	+= -DCORRELATIONS_CLOSED_ENABLE_U7
 endif 
 LD		:= g++ 
 LDFLAGS		:= 
@@ -40,6 +43,7 @@ PROGS		:= correlations/test/prog.cc 			\
 		   correlations/test/print.cc			\
 		   correlations/test/Test.C
 EXEC		:= $(notdir $(basename $(PROGS)))
+EXEC_ARGS	:= -L
 EXTRA		:= Makefile 				\
 		   Doxyfile.in 				\
 		   style.css				\
@@ -60,23 +64,30 @@ EXTRA		:= Makefile 				\
 all:	$(EXEC)
 
 data.dat:prog
-	./prog -w -i $@ -e 1000 -m 10 -M 20
+	@echo "=== Generating data file ======================="
+	@./prog -w -i $@ -e 10 -m 8 -M 10
+	@echo ""
 
-closed.dat:data.dat prog
-	./prog -i $< -o $@ -c -n $(MAXH) -l 
+closed.dat recurrence.dat recursive.dat:data.dat prog
+	@echo "=== Analysing using $(basename $@) ======================="
+	./prog -t $(basename $@) -i $< -o $@ -n 8 $(EXEC_ARGS) 
+	@echo ""
+	
+recurrence.dat:data.dat prog closed.dat
+recursive.dat:data.dat prog recurrence.dat
+closed.dat: EXEC_ARGS=-L
+recurrence.dat:	EXEC_ARGS=-c closed.dat -L
+recursive.dat:  EXEC_ARGS=-c recurrence.dat -L
 
-recursive.dat:data.dat closed.dat prog
-	./prog -i $< -o $@ -r -n $(MAXH) -l -O closed.dat
-
-recursive.png:correlations/test/Test.C data.dat $(HEADERS) $(TESTS)
-	$(ROOT) $(ROOTFLAGS) $<+\(1,$(MAXH),\"data.dat\"\)
-
-closed.png:correlations/test/Test.C data.dat $(HEADERS) $(TESTS)
-	$(ROOT) $(ROOTFLAGS) $<+\(0,$(MAXH),\"data.dat\"\)
-
-
+recursive.png recurrence.png closed.png:correlations/test/Test.C data.dat $(HEADERS) $(TESTS)
+	$(ROOT) $(ROOTFLAGS) $<+\(\"$(basename $@)\",$(MAXH),\"data.dat\"\)
+	
 test:	recursive.dat 
 
+retest:
+	rm -f *.dat 
+	$(MAKE) test
+	
 Test.o: correlations/test/Test.C 
 Test.o:	CPPFLAGS:=$(CPPFLAGS) $(ROOTCFLAGS) -DAS_PROG
 Test.o:	CXXFLAGS:=$(filter-out, -pedantic, $(CXXFLAGS))

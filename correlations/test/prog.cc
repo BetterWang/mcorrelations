@@ -27,57 +27,65 @@ namespace correlations {
      */
     struct Test
     {
-
+      enum EMode {
+	CLOSED,
+	RECURRENCE,
+	RECURSIVE
+      };
       /**
        * Constructor
        */
-      Test(std::istream& input, char mode=1, Size maxN=8,
+      Test(std::istream& input, EMode mode=CLOSED, Size maxN=8,
            bool doNested=false, bool verbose=false)
-        : fH(maxN),
-          fPhis(),
-          fWeights(),
-          fR(input),
-          fQ(0,0, true),
-          fC(0),
-          fN(0),
-          fRC(0),
-          fRN(0),
-          fS(0),
-          fTC(0),
-          fTN(0),
-          fE(0),
-          fV(verbose)
+        : _h(maxN),
+          _phis(),
+          _weights(),
+          _r(input),
+          _q(0,0, true),
+          _c(0),
+          _n(0),
+          _rC(0),
+          _rN(0),
+          _s(0),
+          _tC(0),
+          _tN(0),
+          _e(0),
+          _v(verbose)
       {
-        if (fV) std::cout << "Harmonics:" << std::flush;
+        if (_v) std::cout << "Harmonics:" << std::flush;
         Size sum = 0;
-        Random::Seed(54321);
+        Random::seed(54321);
         for (Size i = 0; i < maxN; i++) {
-          fH[i] = Random::AsHarmonic(-6, 6);
-          if (fV) std::cout << " " << fH[i];
-          sum += std::abs(fH[i]);
+          _h[i] = Random::asHarmonic(-6, 6);
+          if (_v) std::cout << " " << _h[i];
+          sum += std::abs(_h[i]);
         }
-        if (fV) std::cout << " -> " << sum << std::endl;
-        fQ.resize(fH);
-        fRC.resize(maxN-1);
-        fRN.resize(doNested ? maxN-1 : 0);
-        fTC.resize(maxN-1);
-        fTN.resize(doNested ? maxN-1 : 0);
-        fS = Stopwatch::Create();
+        if (_v) std::cout << " -> " << sum << std::endl;
+        _q.resize(_h);
+        _rC.resize(maxN-1);
+        _rN.resize(doNested ? maxN-1 : 0);
+        _tC.resize(maxN-1);
+        _tN.resize(doNested ? maxN-1 : 0);
+        _s = Stopwatch::create();
         switch (mode) {
-        case 0: fC = new correlations::recursive::FromQVector(fQ); break;
-        case 1: fC = new correlations::recurrence::FromQVector(fQ); break;
-        case 2: fC = new correlations::closed::FromQVector(fQ);
+        case 0: _c = new correlations::recursive::FromQVector(_q); break;
+        case 1: _c = new correlations::recurrence::FromQVector(_q); break;
+        case 2: _c = new correlations::closed::FromQVector(_q);
         }
         if (doNested)
-                switch (mode) {
-                case 0:
-                case 1: fN = new correlations::recursive::NestedLoops(fPhis,fWeights,true); break;
-                case 2: fN = new correlations::NestedLoops(fPhis, fWeights, true); break;
+	  switch (mode) {
+	  case 0:
+	  case 1:
+	    _n = new correlations::recursive::NestedLoops(_phis,_weights,true);
+	    break;
+	  case 2:
+	    _n = new correlations::NestedLoops(_phis,_weights,true);
+	    break;
         }
-        if (fV) {
-          std::cout << "Cumulant correlator: " << fC->name() << std::endl;
-          if (fN)
-            std::cout << "Nested loop correlator: " << fN->name() << std::endl;
+        if (_v) {
+          std::cout << "Cumulant correlator: " << _c->name() << std::endl;
+          if (_n)
+            std::cout << "Nested loop correlator: " << _n->name() << std::endl;
         }
       }
       /**
@@ -86,32 +94,32 @@ namespace correlations {
        */
       bool Event()
       {
-        fQ.reset();
-        if (!fR.Event(fQ, fPhis, fWeights)) return false;
+        _q.reset();
+        if (!_r.event(_q, _phis, _weights)) return false;
 
-        fE++;
-        if (fV)
-          std::cout << "Event # " << std::setw(4) << fE << ": "
-                    << std::setw(4) << fPhis.size() << " particles "
+        _e++;
+        if (_v)
+          std::cout << "Event # " << std::setw(4) << _e << ": "
+                    << std::setw(4) << _phis.size() << " particles "
                     << std::flush;
-        for (Size i = 0; i < fRC.size(); i++) {
+        for (Size i = 0; i < _rC.size(); i++) {
           Size n = i+2;
-          if (fV) std::cout << (i == 0 ? "" : "..") << n << std::flush;
-          fS->Start(true);
-          fRC[i] += fC->calculate(n, fH);
-          fTC[i] += fS->Stop();
-          // fS->Print();
+          if (_v) std::cout << (i == 0 ? "" : "..") << n << std::flush;
+          _s->start(true);
+          _rC[i] += _c->calculate(n, _h);
+          _tC[i] += _s->stop();
+          // _s->Print();
           // std::cout << "Calculated QC" << std::endl;
 
-          if (fN) {
-            if (fV) std::cout << '+' << std::flush;
-            fS->Start(true);
-            fRN[i] += fN->calculate(n, fH);
-            fTN[i] += fS->Stop();
+          if (_n) {
+            if (_v) std::cout << '+' << std::flush;
+            _s->start(true);
+            _rN[i] += _n->calculate(n, _h);
+            _tN[i] += _s->stop();
           }
           // std::cout << "Calculated nested loops" << std::endl;
         }
-        if (fV) std::cout << " done" << std::endl;
+        if (_v) std::cout << " done" << std::endl;
 
         return true;
       }
@@ -122,11 +130,11 @@ namespace correlations {
       void End(std::ostream& out)
       {
         PrintTitle(out, "From Q-vector", "From loops", "T_Q", "T_loops");
-        for (Size i = 0; i < fRC.size(); i++) {
-          Complex rc = fRC[i].eval();
-          Complex rn = fN ? fRN[i].eval() : Complex(0,0);
-          Real    tc = fTC[i] / fE;
-          Real    tn = fN ? fTN[i] / fE   : -1;
+        for (Size i = 0; i < _rC.size(); i++) {
+          Complex rc = _rC[i].eval();
+          Complex rn = _n ? _rN[i].eval() : Complex(0,0);
+          Real    tc = _tC[i] / _e;
+          Real    tn = _n ? _tN[i] / _e   : -1;
           PrintResult(out, 2+i, rc, rn, tc, tn);
         }
       }
@@ -134,13 +142,13 @@ namespace correlations {
       {
         size_t savePrec = out.precision();
         out.precision(16);
-        out << "# A total of " << fRC.size() << " cumulants\n"
+        out << "# A total of " << _rC.size() << " cumulants\n"
             << "# Order   QC    NL     t_QC     t_NL" << std::endl;
-        for (Size i = 0; i < fRC.size(); i++) {
-          Complex rc = fRC[i].eval();
-          Complex rn = fN ? fRN[i].eval() : Complex(0,0);
-          Real    tc = fTC[i] / fE;
-          Real    tn = fN ? fTN[i] / fE : -1;
+        for (Size i = 0; i < _rC.size(); i++) {
+          Complex rc = _rC[i].eval();
+          Complex rn = _n ? _rN[i].eval() : Complex(0,0);
+          Real    tc = _tC[i] / _e;
+          Real    tn = _n ? _tN[i] / _e : -1;
           out << i+2 << "\t" << rc << "\t" << rn << "\t" << tc << "\t" << tn
               << std::endl;
         }
@@ -149,10 +157,10 @@ namespace correlations {
       }
       void Compare(std::ostream& out, std::istream& cf)
       {
-        ComplexVector krc(fH.size());
-        ComplexVector krn(fH.size());
-        RealVector    ktc(fH.size());
-        RealVector    ktn(fH.size());
+        ComplexVector krc(_h.size());
+        ComplexVector krn(_h.size());
+        RealVector    ktc(_h.size());
+        RealVector    ktn(_h.size());
 
         while (!cf.eof()) {
           std::string l;
@@ -180,7 +188,7 @@ namespace correlations {
 
           if (i < 2) continue;
           Size n = i - 2;
-          if (n >= fH.size()) continue;
+          if (n >= _h.size()) continue;
 
           krc[n] = rc;
           krn[n] = rn;
@@ -189,10 +197,10 @@ namespace correlations {
         }
 
         PrintTitle(out, "Our Q-vector", "Other Q-vector", "(T_B-T_A)/T_A");
-        for (Size i = 0; i < fRC.size(); i++) {
-          const Complex& r  = fRC[i].eval();
+        for (Size i = 0; i < _rC.size(); i++) {
+          const Complex& r  = _rC[i].eval();
           const Complex& k  = krc[i];
-          Real           tc = fTC[i] / fE;
+          Real           tc = _tC[i] / _e;
           Real           l  = ktc[i];
           Real           dt = (l-tc) / tc;
           PrintResult(out, 2+i, r, k, dt);
@@ -282,33 +290,33 @@ namespace correlations {
         out << std::endl;
       }
       /** Harmonic vector */
-      HarmonicVector fH;
+      HarmonicVector _h;
       /** Phi cache */
-      RealVector fPhis;
+      RealVector _phis;
       /** Weight cache */
-      RealVector fWeights;
+      RealVector _weights;
       /** My generator */
-      ReadData fR;
+      ReadData _r;
       /** Our Q vector */
-      QVector fQ;
+      QVector _q;
       /** Correlator that uses cumulants */
-      FromQVector* fC;
+      FromQVector* _c;
       /** Correlator that uses nested loops */
-      NestedLoops* fN;
+      NestedLoops* _n;
       /** Cumulant results */
-      ResultVector fRC;
+      ResultVector _rC;
       /** Nested loop results */
-      ResultVector fRN;
+      ResultVector _rN;
       /** Stop watch */
-      Stopwatch*   fS;
+      Stopwatch*   _s;
       /** Cumulant timing */
-      RealVector fTC;
+      RealVector _tC;
       /** Nested loop timing */
-      RealVector fTN;
+      RealVector _tN;
       /** Counter of events */
-      Size fE;
+      Size _e;
       /** Be verbose */
-      bool fV;
+      bool _v;
     };
   }
 }
@@ -331,22 +339,41 @@ usage(const char* prog)
   std::cout << "Usage: " << prog << " [OPTIONS]\n\n"
             << "Options:" << std::endl;
 
-  helpline('h', "",         "This help", "");
-  helpline('v', "",         "Be verbose", "false");
-  helpline('r', "",         "Use recursive algoritms",    "true");
-  helpline('c', "",         "Use closed form algorithms", "false");
-  helpline('l', "",         "Do not execute nested loops","true");
-  helpline('L', "",         "Do execute nested loops",    "false");
-  helpline('i', "FILENAME", "Input file name",            "data.dat");
-  helpline('o', "FILENAME", "Output file name",           "recursive/closed.dat");
-  helpline('O', "FILENAME", "Existing file to compare to","");
-  helpline('n', "MAXH",     "Maximum correlator",         "6");
-  helpline('w', "",         "Write data file, and exit",  "false");
-  helpline('e', "NEVENTS",  "Number of events to write",  "100");
-  helpline('m', "NPART",    "Least number of particles/events","800");
+  helpline('h', "",         "This help",                         "");
+  helpline('v', "",         "Be verbose",                        "false");
+  helpline('l', "",         "Do not execute nested loops",       "true");
+  helpline('L', "",         "Do execute nested loops",           "false");
+  helpline('i', "FILENAME", "Input file name",                   "data.dat");
+  helpline('o', "FILENAME", "Output file name",                  "MODE.dat");
+  helpline('c', "FILENAME", "Existing file to compare to",       "");
+  helpline('n', "MAXH",     "Maximum correlator",                "6");
+  helpline('w', "",         "Write data file, and exit",         "false");
+  helpline('e', "NEVENTS",  "Number of events to write",         "100");
+  helpline('m', "NPART",    "Least number of particles/events",  "800");
   helpline('M', "NPART",    "Largest number of particles/events","1000");
+  helpline('t', "MODE",     "Which algorithm to use",            "closed");
 }
 
+struct to_upper
+{
+  char operator()(char c) { return std::toupper(c); }
+};
+struct to_lower
+{
+  char operator()(char c) { return std::tolower(c); }
+};
+
+correlations::test::Test::EMode
+str2mode(const std::string& s)
+{
+  std::string c(s);
+  std::transform(c.begin(), c.end(), c.begin(), to_upper());
+  if      (c == "CLOSED")     return correlations::test::Test::CLOSED;
+  else if (c == "RECURRENCE") return correlations::test::Test::RECURRENCE;
+  else if (c == "RECURSIVE")  return correlations::test::Test::RECURSIVE;
+  std::cerr << "Unknown mode: " << c << " assuming CLOSED" << std::endl;
+  return correlations::test::Test::CLOSED;
+}
 /**
  * Entry point for program.
  *
@@ -399,7 +426,7 @@ main(int argc, char** argv)
   std::string    input("data.dat");
   std::string    output("");
   std::string    compare("");
-  std::string    smode("");
+  std::string    smode("closed");
   for (int i = 1; i < argc; i++) {
     if (argv[i][0] == '-') {
       switch (argv[i][1]) {
@@ -414,7 +441,7 @@ main(int argc, char** argv)
       case 'M': maxN      = atoi(argv[++i]); break;
       case 'i': input     = argv[++i]; break;
       case 'o': output    = argv[++i]; break;
-      case 'O': compare   = argv[++i]; break;
+      case 'c': compare   = argv[++i]; break;
       case 't': smode     = argv[++i]; break;
       default:
         std::cerr << argv[0] << ": Unknown option " << argv[i] << std::endl;
@@ -426,22 +453,22 @@ main(int argc, char** argv)
     std::ofstream out(input.c_str());
     correlations::test::WriteData writer(minN, maxN);
     for (unsigned short ev = 0; ev < nEvents; ev++)
-      writer.Event(out, ev);
+      writer.event(out, ev);
     out.close();
     return 0;
   }
 
-  char mode = 2;
-  if      (smode == "recursive")  mode=0;
-  else if (smode == "recurrence") mode=1;
-
   std::ifstream in(input.c_str());
-  correlations::test::Test t(in, mode, maxH, loops, verbose);
+  correlations::test::Test t(in, str2mode(smode), maxH, loops, verbose);
   while (t.Event()) {};
   t.End(std::cout);
   in.close();
 
-  if (output.empty()) { output = smode; output += ".dat"; }
+  if (output.empty()) {
+    std::transform(smode.begin(), smode.end(), smode.begin(), to_lower());
+    output = smode;
+    output += ".dat";
+  }
   std::ofstream out(output.c_str());
   t.Save(out);
   out.close();
