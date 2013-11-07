@@ -38,8 +38,13 @@ TESTS		:= correlations/test/Distribution.hh		\
 		   correlations/test/ReadData.hh		\
 		   correlations/test/Stopwatch.hh		\
 		   correlations/test/Weights.hh			\
-		   correlations/test/WriteData.hh	
-PROGS		:= correlations/test/prog.cc 			\
+		   correlations/test/WriteData.hh		\
+		   correlations/test/Tester.hh			\
+		   correlations/test/Printer.hh			\
+		   correlations/test/Comparer.hh		
+PROGS		:= correlations/test/analyze.cc 		\
+		   correlations/test/write.cc 			\
+		   correlations/test/compare.cc 		\
 		   correlations/test/print.cc			\
 		   correlations/test/Test.C
 EXEC		:= $(notdir $(basename $(PROGS)))
@@ -63,40 +68,43 @@ EXTRA		:= Makefile 				\
 
 all:	$(EXEC)
 
-data.dat:prog
+data.dat:write
 	@echo "=== Generating data file ======================="
-	@./prog -w -i $@ -e 10 -m 8 -M 10
+	./$<  -e 10 -m 8 -M 10 -o $@
 	@echo ""
 
-closed.dat recurrence.dat recursive.dat:data.dat prog
+closed.dat recurrence.dat recursive.dat:data.dat analyze
 	@echo "=== Analysing using $(basename $@) ======================="
-	./prog -t $(basename $@) -i $< -o $@ -n 8 $(EXEC_ARGS) 
+	./analyze -t $(basename $@) -i $< -o $@ -n 6 -L 
 	@echo ""
-	
+
 recurrence.dat:data.dat prog closed.dat
 recursive.dat:data.dat prog recurrence.dat
 closed.dat: EXEC_ARGS=-L
-recurrence.dat:	EXEC_ARGS=-c closed.dat -L
-recursive.dat:  EXEC_ARGS=-c recurrence.dat -L
 
 recursive.png recurrence.png closed.png:correlations/test/Test.C data.dat $(HEADERS) $(TESTS)
 	$(ROOT) $(ROOTFLAGS) $<+\(\"$(basename $@)\",$(MAXH),\"data.dat\"\)
-	
-test:	recursive.dat 
+
+test:	recursive.dat  compare
+	-./compare -a recurrence.dat -b closed.dat
+	-./compare -a recursive.dat  -b closed.dat
 
 retest:
 	rm -f *.dat 
 	$(MAKE) test
-	
+
 Test.o: correlations/test/Test.C 
 Test.o:	CPPFLAGS:=$(CPPFLAGS) $(ROOTCFLAGS) -DAS_PROG
 Test.o:	CXXFLAGS:=$(filter-out, -pedantic, $(CXXFLAGS))
 Test:	LDFLAGS:=$(LDFLAGS) $(ROOTLIBS) 
 
-prog:	prog.o
-prog.o:	correlations/test/prog.cc $(HEADERS) $(TESTS)
-
-print:print.o
+analyze:	analyze.o
+analyze.o:	correlations/test/analyze.cc $(HEADERS) $(TESTS)
+write:		write.o
+write.o:	correlations/test/write.cc $(HEADERS) $(TESTS)
+compare:	compare.o
+compare.o:	correlations/test/compare.cc $(HEADERS) $(TESTS)
+print:		print.o
 
 Doxyfile:Doxyfile.in 
 	sed -e 's/@PACKAGE@/${PACKAGE}/' -e 's/@VERSION@/${VERSION}/' < $< > $@

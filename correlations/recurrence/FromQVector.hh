@@ -9,13 +9,9 @@
  *
  * Copyright (c) 2013 Christian Holm Christensen
  */
-#include <correlations/QVector.hh>
-#include <correlations/Types.hh>
 #include <correlations/FromQVector.hh>
 #include <algorithm>
 #include <numeric>
-#include <iterator>
-#include <iomanip>
 
 namespace correlations {
   /**
@@ -60,7 +56,7 @@ namespace correlations {
        *
        * @return @f$ QC\{1\}@f$
        */
-      Complex U1(const Harmonic n1) const
+      Complex uc1(const Harmonic n1) const
       {
         return _q(n1, 1);
       }
@@ -72,7 +68,7 @@ namespace correlations {
        *
        * @return the correlator
        */
-      Complex U2(const Harmonic n1, const Harmonic n2) const
+      Complex uc2(const Harmonic n1, const Harmonic n2) const
       {
         return _q(n1,1) * _q(n2,1) - _q(n1+n2,2);
       }
@@ -85,12 +81,12 @@ namespace correlations {
        *
        * @return the correlator
        */
-      Complex U3(const Harmonic n1,
+      Complex uc3(const Harmonic n1,
                   const Harmonic n2,
                   const Harmonic n3) const
       {
         const Real c2 = 2;
-        return (U2(n1,n2) * _q(n3,1)
+        return (uc2(n1,n2) * _q(n3,1)
                 - _q(n2,1) * _q(n1+n3,2)
                 - _q(n1,1) * _q(n2+n3,2)
                 + c2 * _q(n1+n2+n3,3));
@@ -115,20 +111,20 @@ namespace correlations {
        *
        * @return the correlator
        */
-      Complex U4(const Harmonic n1,
+      Complex uc4(const Harmonic n1,
                   const Harmonic n2,
                   const Harmonic n3,
                   const Harmonic n4) const
       {
         const Real c2 = 2;
         const Real c6 = 6;
-        return (U3(n1,n2,n3)*_q(n4,1)
-                - U2(n2,n3) * _q(n1+n4,2)
-                - U2(n1,n3) * _q(n2+n4,2)
-                - U2(n1,n2) * _q(n3+n4,2)
-                + c2 * U1(n3) * _q(n1+n2+n4,3)
-                + c2 * U1(n2) * _q(n1+n3+n4,3)
-                + c2 * U1(n1) * _q(n2+n3+n4,3)
+        return (uc3(n1,n2,n3)*_q(n4,1)
+                - uc2(n2,n3) * _q(n1+n4,2)
+                - uc2(n1,n3) * _q(n2+n4,2)
+                - uc2(n1,n2) * _q(n3+n4,2)
+                + c2 * uc1(n3) * _q(n1+n2+n4,3)
+                + c2 * uc1(n2) * _q(n1+n3+n4,3)
+                + c2 * uc1(n1) * _q(n2+n3+n4,3)
                 - c6 * _q(n1+n2+n3+n4,4));
       }
       /**
@@ -160,7 +156,7 @@ namespace correlations {
        *
        * @return The correlator
        */
-      Complex U5(const Harmonic n1,
+      Complex uc5(const Harmonic n1,
                   const Harmonic n2,
                   const Harmonic n3,
                   const Harmonic n4,
@@ -168,22 +164,22 @@ namespace correlations {
       {
         const Real c2  = 2;
         const Real c6  = 6;
-        const Real c24 = 6;
-        return (U4(n1,n2,n3,n4) * _q(n5, 1)
-                - U3(n2,n3,n4) * _q(n1+n5,2)
-                - U3(n1,n3,n4) * _q(n2+n5,2)
-                - U3(n1,n2,n4) * _q(n3+n5,2)
-                - U3(n1,n2,n3) * _q(n4+n5,2)
-                + c2 * U2(n3,n4) * _q(n1+n2+n5,3)
-                + c2 * U2(n2,n4) * _q(n1+n3+n5,3)
-                + c2 * U2(n1,n4) * _q(n2+n3+n5,3)
-                + c2 * U2(n2,n3) * _q(n1+n4+n5,3)
-                + c2 * U2(n1,n3) * _q(n2+n4+n5,3)
-                + c2 * U2(n1,2)  * _q(n3+n4+n5,3)
-                - c6 * U1(n4)    * _q(n1+n2+n3+n5,4)
-                - c6 * U1(n3)    * _q(n1+n2+n4+n5,4)
-                - c6 * U1(n2)    * _q(n1+n3+n4+n5,4)
-                - c6 * U1(n1)    * _q(n2+n3+n4+n5,4)
+        const Real c24 = 24;
+        return (uc4(n1,n2,n3,n4) * _q(n5, 1)
+                - uc3(n2,n3,n4) * _q(n1+n5,2)
+                - uc3(n1,n3,n4) * _q(n2+n5,2)
+                - uc3(n1,n2,n4) * _q(n3+n5,2)
+                - uc3(n1,n2,n3) * _q(n4+n5,2)
+                + c2 * uc2(n3,n4) * _q(n1+n2+n5,3)
+                + c2 * uc2(n2,n4) * _q(n1+n3+n5,3)
+                + c2 * uc2(n1,n4) * _q(n2+n3+n5,3)
+                + c2 * uc2(n2,n3) * _q(n1+n4+n5,3)
+                + c2 * uc2(n1,n3) * _q(n2+n4+n5,3)
+                + c2 * uc2(n1,2)  * _q(n3+n4+n5,3)
+                - c6 * uc1(n4)    * _q(n1+n2+n3+n5,4)
+                - c6 * uc1(n3)    * _q(n1+n2+n4+n5,4)
+                - c6 * uc1(n2)    * _q(n1+n3+n4+n5,4)
+                - c6 * uc1(n1)    * _q(n2+n3+n4+n5,4)
                 + c24 * _q(n1+n2+n3+n4+n5,5));
       }
       /* @} */
@@ -287,10 +283,10 @@ namespace correlations {
        *
        * @return @f$ QC{n}@f$
        */
-      Complex UN(const Size n, const HarmonicVector& h) const
+      Complex ucN(const Size n, const HarmonicVector& h) const
       {
         SizeVector v(n-1); // Allocate cache here
-        return UN2(n, h, v);
+        return ucN2(n, h, v);
       }
       /**
        * Calculate the multi-particle correlation
@@ -316,12 +312,12 @@ namespace correlations {
        *
        * @return @f$ QC{n}@f$
        */
-      Complex UN2(const Size n,
+      Complex ucN2(const Size n,
                   const HarmonicVector& h,
                   SizeVector v) const
       {
         if (n == 0) return Complex(1,0);
-        if (n == 1) return U1(h[0]);
+        if (n == 1) return uc1(h[0]);
 
         // Make vector of harmonics - expensive allocation
         HarmonicVector hh(n);
@@ -344,7 +340,7 @@ namespace correlations {
             // Harmonic second = 0;
             // for (size_t i = k; i < n-1; i++) second += h[v[i]];
 
-            Complex t = UN2(k, hh, v);
+            Complex t = ucN2(k, hh, v);
 
             // The calculation
             Harmonic a = std::accumulate(hh.begin()+k, hh.begin()+n,0);

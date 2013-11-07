@@ -9,11 +9,7 @@
  *
  * Copyright (c) 2013 Christian Holm Christensen
  */
-#include <vector>
 #include <cmath>
-#include <algorithm>
-#include <iterator>
-#include <correlations/Types.hh>
 #include <correlations/Correlator.hh>
 
 namespace correlations {
@@ -122,17 +118,17 @@ namespace correlations {
      *
      * @return The correlator and the summed weights
      */
-    virtual Result multi(const Size n, const HarmonicVector& h) const
+    virtual Result cN(const Size n, const HarmonicVector& h) const
     {
       switch (n) {
-      case 1: return C1(h);   break;
-      case 2: return C2(h);   break;
-      case 3: return C3(h); break;
-      case 4: return C4(h);  break;
-      case 5: return C5(h);  break;
-      case 6: return C6(h);  break;
-      case 7: return C7(h);  break;
-      case 8: return C8(h);  break;
+      case 1: return c1(h);   break;
+      case 2: return c2(h);   break;
+      case 3: return c3(h); break;
+      case 4: return c4(h);  break;
+      case 5: return c5(h);  break;
+      case 6: return c6(h);  break;
+      case 7: return c7(h);  break;
+      case 8: return c8(h);  break;
       }
       std::cerr << "Number of correlators too big:" << n << std::endl;
       return Result();
@@ -148,7 +144,7 @@ namespace correlations {
      *
      * @return Correlator
      */
-    Result C1(const HarmonicVector& h) const
+    Result c1(const HarmonicVector& h) const
     {
       Complex r;
       Real sumw = 0;
@@ -169,7 +165,7 @@ namespace correlations {
      *
      * @return Correlator
      */
-    Result C2(const HarmonicVector& h) const
+    Result c2(const HarmonicVector& h) const
     {
       Complex      r;
       Real         sumw = 0;
@@ -192,7 +188,7 @@ namespace correlations {
      *
      * @return Correlator
      */
-    Result C3(const HarmonicVector& h) const
+    Result c3(const HarmonicVector& h) const
     {
       Complex r;
       Real sumw = 0;
@@ -218,7 +214,7 @@ namespace correlations {
      *
      * @return Correlator
      */
-    Result C4(const HarmonicVector& h) const
+    Result c4(const HarmonicVector& h) const
     {
       Complex r;
       Real sumw = 0;
@@ -250,7 +246,7 @@ namespace correlations {
      *
      * @return @f$QC\{5\}@f$
      */
-    virtual Result C5(const HarmonicVector& h) const
+    virtual Result c5(const HarmonicVector& h) const
     {
       Complex r;
       Real sumw = 0;
@@ -286,7 +282,7 @@ namespace correlations {
      *
      * @return @f$QC\{6\}@f$
      */
-    virtual Result C6(const HarmonicVector& h) const
+    virtual Result c6(const HarmonicVector& h) const
     {
       Complex r;
       Real sumw = 0;
@@ -325,7 +321,7 @@ namespace correlations {
      *
      * @return @f$QC\{7\}@f$
      */
-    virtual Result C7(const HarmonicVector& h) const
+    virtual Result c7(const HarmonicVector& h) const
     {
       Complex r;
       Real sumw = 0;
@@ -367,7 +363,7 @@ namespace correlations {
      *
      * @return @f$QC\{8\}@f$
      */
-    virtual Result C8(const HarmonicVector& h) const
+    virtual Result c8(const HarmonicVector& h) const
     {
       Complex r;
       Real sumw = 0;

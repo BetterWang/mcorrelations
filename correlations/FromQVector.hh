@@ -10,12 +10,8 @@
  * Copyright (c) 2013 Christian Holm Christensen
  */
 #include <correlations/QVector.hh>
-#include <correlations/Types.hh>
 #include <correlations/Correlator.hh>
-#include <algorithm>
-#include <numeric>
-#include <iterator>
-#include <iomanip>
+
 
 namespace correlations {
   //____________________________________________________________________
@@ -63,7 +59,7 @@ namespace correlations {
      *
      * @return The correlator and the summed weights
      */
-    virtual Result multi(const Size n, const HarmonicVector& h) const
+    virtual Result cN(const Size n, const HarmonicVector& h) const
     {
       static HarmonicVector null(_q.maxN());
       static bool filled = false;
@@ -71,7 +67,7 @@ namespace correlations {
         std::fill(null.begin(), null.end(), 0);
         filled = true;
       }
-      return Result(UN(n, h), UN(n, null).real());
+      return Result(ucN(n, h), ucN(n, null).real());
     }
     /**
      * Calculate 1-particle correlation.
@@ -83,9 +79,9 @@ namespace correlations {
      *
      * @return @f$ QC\{1\}@f$
      */
-    virtual Result C1(const HarmonicVector& h) const
+    virtual Result c1(const HarmonicVector& h) const
     {
-      return Result(U1(h[0]), U1(0).real());
+      return Result(uc1(h[0]), uc1(0).real());
     }
     /**
      * Generic two-particle correlation.
@@ -97,9 +93,9 @@ namespace correlations {
      *
      * @return @f$ QC\{2\}@f$
      */
-    virtual Result C2(const HarmonicVector& h) const
+    virtual Result c2(const HarmonicVector& h) const
     {
-      return Result(U2(h[0], h[1]), U2(0, 0).real());
+      return Result(uc2(h[0], h[1]), uc2(0, 0).real());
     }
     /**
      * Generic 3-particle correlation.
@@ -111,9 +107,9 @@ namespace correlations {
      *
      * @return @f$ QC\{3\}@f$
      */
-    virtual Result C3(const HarmonicVector& h) const
+    virtual Result c3(const HarmonicVector& h) const
     {
-      return Result(U3(h[0], h[1], h[2]), U3(0,0,0).real());
+      return Result(uc3(h[0], h[1], h[2]), uc3(0,0,0).real());
     }
     /**
      * Generic 4-particle correlation.
@@ -125,9 +121,9 @@ namespace correlations {
      *
      * @return @f$ QC\{4\}@f$
      */
-    virtual Result C4(const HarmonicVector& h) const
+    virtual Result c4(const HarmonicVector& h) const
     {
-      return Result(U4(h[0],h[1],h[2],h[3]), U4(0,0,0,0).real());
+      return Result(uc4(h[0],h[1],h[2],h[3]), uc4(0,0,0,0).real());
     }
     /**
      * Calculate 5-particle correlator.
@@ -139,10 +135,10 @@ namespace correlations {
      *
      * @return @f$QC\{5\}@f$
      */
-    virtual Result C5(const HarmonicVector& h) const
+    virtual Result c5(const HarmonicVector& h) const
     {
-      return Result(U5(h[0], h[1], h[2], h[3], h[4]),
-                    U5(0, 0, 0, 0, 0).real());
+      return Result(uc5(h[0], h[1], h[2], h[3], h[4]),
+                    uc5(0, 0, 0, 0, 0).real());
     }
     /**
      * Calculate 6-particle correlator.
@@ -154,10 +150,10 @@ namespace correlations {
      *
      * @return @f$QC\{6\}@f$
      */
-    virtual Result C6(const HarmonicVector& h) const
+    virtual Result c6(const HarmonicVector& h) const
     {
-      return Result(U6(h[0],h[1],h[2],h[3],h[4],h[5]),
-                    U6(0,   0,   0,   0,   0,   0).real());
+      return Result(uc6(h[0],h[1],h[2],h[3],h[4],h[5]),
+                    uc6(0,   0,   0,   0,   0,   0).real());
     }
     /**
      * Calculate 7-particle correlator.
@@ -169,11 +165,11 @@ namespace correlations {
      *
      * @return @f$QC\{7\}@f$
      */
-    virtual Result C7(const HarmonicVector& h) const
+    virtual Result c7(const HarmonicVector& h) const
     {
       std::cout << "Calculating C7" << std::endl;
-      return Result(U7(h[0],h[1],h[2],h[3],h[4],h[5],h[6]),
-                    U7(0,   0,   0,   0,   0,   0,   0).real());
+      return Result(uc7(h[0],h[1],h[2],h[3],h[4],h[5],h[6]),
+                    uc7(0,   0,   0,   0,   0,   0,   0).real());
     }
     /**
      * Calculate 8-particle correlator.
@@ -185,11 +181,11 @@ namespace correlations {
      *
      * @return @f$QC\{8\}@f$
      */
-    virtual Result C8(const HarmonicVector& h) const
+    virtual Result c8(const HarmonicVector& h) const
     {
       std::cout << "Calculating C8" << std::endl;
-      return Result(U8(h[0],h[1],h[2],h[3],h[4],h[5],h[6],h[7]),
-                    U8(0,   0,   0,   0,   0,   0,   0,   0).real());
+      return Result(uc8(h[0],h[1],h[2],h[3],h[4],h[5],h[6],h[7]),
+                    uc8(0,   0,   0,   0,   0,   0,   0,   0).real());
     }
     /* @} */
     /**
@@ -205,7 +201,7 @@ namespace correlations {
      *
      * @return @f$ \langle\exp[i(\sum_j^n h_j\phi_j)]\rangle@f$
      */
-    virtual Complex UN(const Size n, const HarmonicVector& h) const = 0;
+    virtual Complex ucN(const Size n, const HarmonicVector& h) const = 0;
     /**
      * Generic 1-particle correlation.
      * @f[
@@ -216,7 +212,7 @@ namespace correlations {
      *
      * @return @f$ QC\{1\}@f$
      */
-    virtual Complex U1(const Harmonic n1) const
+    virtual Complex uc1(const Harmonic n1) const
     {
       return _q(n1, 1);
     }
@@ -231,11 +227,11 @@ namespace correlations {
      *
      * @return the correlator
      */
-    virtual Complex U2(const Harmonic n1, const Harmonic n2) const
+    virtual Complex uc2(const Harmonic n1, const Harmonic n2) const
     {
       HarmonicVector h(2);
       h[0] = n1; h[1] = n2;
-      return UN(h.size(), h);
+      return ucN(h.size(), h);
     }
     /**
      * Generic 3-particle correlation.
@@ -249,13 +245,13 @@ namespace correlations {
      *
      * @return the correlator
      */
-    virtual Complex U3(const Harmonic n1,
+    virtual Complex uc3(const Harmonic n1,
                        const Harmonic n2,
                        const Harmonic n3) const
     {
       HarmonicVector h(3);
       h[0] = n1; h[1] = n2; h[2] = n3;
-      return UN(h.size(), h);
+      return ucN(h.size(), h);
     }
     /**
      * Generic 4-particle correlation.
@@ -271,14 +267,14 @@ namespace correlations {
      *
      * @return the correlator
      */
-    virtual Complex U4(const Harmonic n1,
-                       const Harmonic n2,
+    virtual Complex uc4(const Harmonic n1,
+                        const Harmonic n2,
                        const Harmonic n3,
                        const Harmonic n4) const
     {
       HarmonicVector h(4);
       h[0] = n1; h[1] = n2; h[2] = n3; h[3] = n4;
-      return UN(h.size(), h);
+      return ucN(h.size(), h);
     }
     /**
      * Generic 5-particle correlation.
@@ -294,7 +290,7 @@ namespace correlations {
      *
      * @return The correlator
      */
-    virtual Complex U5(const Harmonic n1,
+    virtual Complex uc5(const Harmonic n1,
                        const Harmonic n2,
                        const Harmonic n3,
                        const Harmonic n4,
@@ -303,7 +299,7 @@ namespace correlations {
       HarmonicVector h(5);
       h[0] = n1; h[1] = n2; h[2] = n3; h[3] = n4;
       h[4] = n5;
-      return UN(h.size(), h);
+      return ucN(h.size(), h);
     }
     /**
      * Calculate 6-particle correlator
@@ -320,7 +316,7 @@ namespace correlations {
      *
      * @return @f$QC\{6\}@f$
      */
-    virtual Complex U6(const Harmonic n1,
+    virtual Complex uc6(const Harmonic n1,
                        const Harmonic n2,
                        const Harmonic n3,
                        const Harmonic n4,
@@ -330,7 +326,7 @@ namespace correlations {
       HarmonicVector h(6);
       h[0] = n1; h[1] = n2; h[2] = n3; h[3] = n4;
       h[4] = n5; h[5] = n6; // h[6] = n7; h[7] = n8;
-      return UN(h.size(), h);
+      return ucN(h.size(), h);
     }
     /**
      * Calculate 7-particle correlator
@@ -348,7 +344,7 @@ namespace correlations {
      *
      * @return @f$QC\{7\}@f$
      */
-    virtual Complex U7(const Harmonic n1,
+    virtual Complex uc7(const Harmonic n1,
                        const Harmonic n2,
                        const Harmonic n3,
                        const Harmonic n4,
@@ -359,7 +355,7 @@ namespace correlations {
       HarmonicVector h(7);
       h[0] = n1; h[1] = n2; h[2] = n3; h[3] = n4;
       h[4] = n5; h[5] = n6; h[6] = n7; // h[7] = n8;
-      return UN(h.size(), h);
+      return ucN(h.size(), h);
     }
     /**
      * Calculate 8-particle correlator
@@ -378,7 +374,7 @@ namespace correlations {
      *
      * @return @f$QC\{8\}@f$
      */
-    virtual Complex U8(const Harmonic n1,
+    virtual Complex uc8(const Harmonic n1,
                        const Harmonic n2,
                        const Harmonic n3,
                        const Harmonic n4,
@@ -390,7 +386,7 @@ namespace correlations {
       HarmonicVector h(8);
       h[0] = n1; h[1] = n2; h[2] = n3; h[3] = n4;
       h[4] = n5; h[5] = n6; h[6] = n7; h[7] = n8;
-      return UN(h.size(), h);
+      return ucN(h.size(), h);
     }
     /* @} */
     QVector& _q;

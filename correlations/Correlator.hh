@@ -89,19 +89,19 @@ namespace correlations {
       if (size > _maxFixed) {
 	// If we're above our fixed cut, or above 8, use the generic
 	// algorithms
-	return multi(size, h);
+	return cN(size, h);
       }
 
       // Now, use specific implementations
       switch (size) {
-      case 1: return C1(h);   break;
-      case 2: return C2(h);   break;
-      case 3: return C3(h); break;
-      case 4: return C4(h);  break;
-      case 5: return C5(h);  break;
-      case 6: return C6(h);  break;
-      case 7: return C7(h);  break;
-      case 8: return C8(h);  break;
+      case 1: return c1(h);   break;
+      case 2: return c2(h);   break;
+      case 3: return c3(h); break;
+      case 4: return c4(h);  break;
+      case 5: return c5(h);  break;
+      case 6: return c6(h);  break;
+      case 7: return c7(h);  break;
+      case 8: return c8(h);  break;
       }
       std::cerr << "Number of correlators too big:" << size << std::endl;
       return Result();
@@ -124,7 +124,7 @@ namespace correlations {
      *
      * @return The correlator and the summed weights
      */
-    virtual Result multi(const Size n, const HarmonicVector& h) const = 0;
+    virtual Result cN(const Size n, const HarmonicVector& h) const = 0;
     /**
      * Calculate 1-particle correlator.
      * @f[
@@ -135,7 +135,7 @@ namespace correlations {
      *
      * @return @f$ C\{1\}@f$
      */
-    virtual Result C1(const HarmonicVector& h) const = 0;
+    virtual Result c1(const HarmonicVector& h) const = 0;
     /**
      * Calculate 2-particle correlator.
      * @f[
@@ -146,7 +146,7 @@ namespace correlations {
      *
      * @return @f$ C\{2\}@f$
      */
-    virtual Result C2(const HarmonicVector& h) const = 0;
+    virtual Result c2(const HarmonicVector& h) const = 0;
     /**
      * Calculate 3-particle correlator.
      * @f[
@@ -157,7 +157,7 @@ namespace correlations {
      *
      * @return @f$QC\{3\}@f$
      */
-    virtual Result C3(const HarmonicVector& h) const = 0;
+    virtual Result c3(const HarmonicVector& h) const = 0;
     /**
      * Calculate 4-particle correlator.
      * @f[
@@ -168,7 +168,7 @@ namespace correlations {
      *
      * @return @f$QC\{4\}@f$
      */
-    virtual Result C4(const HarmonicVector& h) const = 0;
+    virtual Result c4(const HarmonicVector& h) const = 0;
     /**
      * Calculate 5-particle correlator.
      * @f[
@@ -179,7 +179,7 @@ namespace correlations {
      *
      * @return @f$QC\{5\}@f$
      */
-    virtual Result C5(const HarmonicVector& h) const =0;
+    virtual Result c5(const HarmonicVector& h) const =0;
     /**
      * Calculate 6-particle correlator.
      * @f[
@@ -190,7 +190,7 @@ namespace correlations {
      *
      * @return @f$QC\{6\}@f$
      */
-    virtual Result C6(const HarmonicVector& h) const =0;
+    virtual Result c6(const HarmonicVector& h) const =0;
     /**
      * Calculate 7-particle correlator.
      * @f[
@@ -201,7 +201,7 @@ namespace correlations {
      *
      * @return @f$QC\{7\}@f$
      */
-    virtual Result C7(const HarmonicVector& h) const =0;
+    virtual Result c7(const HarmonicVector& h) const =0;
     /**
      * Calculate 8-particle correlator.
      * @f[
@@ -212,7 +212,7 @@ namespace correlations {
      *
      * @return @f$QC\{8\}@f$
      */
-    virtual Result C8(const HarmonicVector& h) const =0;
+    virtual Result c8(const HarmonicVector& h) const =0;
 
     Size _maxFixed;
   };

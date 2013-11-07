@@ -10,12 +10,7 @@
  * Copyright (c) 2013 Christian Holm Christensen
  */
 #include <correlations/QVector.hh>
-#include <correlations/Types.hh>
 #include <correlations/Correlator.hh>
-#include <algorithm>
-#include <numeric>
-#include <iterator>
-#include <iomanip>
 
 namespace correlations {
   /**
@@ -67,25 +62,25 @@ namespace correlations {
        *
        * @return The correlator and the summed weights
        */
-      Complex UN(const Size n, const HarmonicVector& h) const
+      Complex ucN(const Size n, const HarmonicVector& h) const
       {
 	switch (n) {
-	case 1: return U1(h[0]);
-	case 2: return U2(h[0], h[1]);
-	case 3: return U3(h[0], h[1], h[2]);
-	case 4: return U4(h[0], h[1], h[2], h[3]);
-	case 5: return U5(h[0], h[1], h[2], h[3], h[4]);
-	case 6: return U6(h[0], h[1], h[2], h[3], h[4], h[5]);
+	case 1: return uc1(h[0]);
+	case 2: return uc2(h[0], h[1]);
+	case 3: return uc3(h[0], h[1], h[2]);
+	case 4: return uc4(h[0], h[1], h[2], h[3]);
+	case 5: return uc5(h[0], h[1], h[2], h[3], h[4]);
+	case 6: return uc6(h[0], h[1], h[2], h[3], h[4], h[5]);
 	case 7:
 #ifdef CORRELATIONS_CLOSED_ENABLE_QC7
-	  return U7(h[0], h[1], h[2], h[3], h[4], h[5], h[6]);
+	  return uc7(h[0], h[1], h[2], h[3], h[4], h[5], h[6]);
 #else
 	  std::cerr << "closed-form C7 disabled at compile-time" << std::endl;
 	  break;
 #endif
 	case 8:
 #ifdef CORRELATIONS_CLOSED_ENABLE_QC8
-	  return U8(h[0], h[1], h[2], h[3], h[4], h[5], h[6], h[7]);
+	  return uc8(h[0], h[1], h[2], h[3], h[4], h[5], h[6], h[7]);
 #else
 	  std::cerr << "closed-form C8 disabled at compile-time" << std::endl;
 	  break;
@@ -104,7 +99,7 @@ namespace correlations {
        *
        * @return @f$ QC\{1\}@f$
        */
-      Complex U1(const Harmonic n1) const
+      Complex uc1(const Harmonic n1) const
       {
 	return _q(n1, 1);
       }
@@ -116,7 +111,7 @@ namespace correlations {
        *
        * @return the correlator
        */
-      Complex U2(const Harmonic n1, const Harmonic n2) const
+      Complex uc2(const Harmonic n1, const Harmonic n2) const
       {
 	return _q(n1,1) * _q(n2,1) - _q(n1+n2,2);
       }
@@ -129,7 +124,7 @@ namespace correlations {
        *
        * @return the correlator
        */
-      Complex U3(const Harmonic n1,
+      Complex uc3(const Harmonic n1,
 		  const Harmonic n2,
 		  const Harmonic n3) const
       {
@@ -150,7 +145,7 @@ namespace correlations {
        *
        * @return the correlator
        */
-      Complex U4(const Harmonic n1,
+      Complex uc4(const Harmonic n1,
 		  const Harmonic n2,
 		  const Harmonic n3,
 		  const Harmonic n4) const
@@ -184,7 +179,7 @@ namespace correlations {
        *
        * @return The correlator
        */
-      Complex U5(const Harmonic n1,
+      Complex uc5(const Harmonic n1,
 		  const Harmonic n2,
 		  const Harmonic n3,
 		  const Harmonic n4,
@@ -258,7 +253,7 @@ namespace correlations {
        *
        * @return The correlator
        */
-      virtual Complex U6(const Harmonic n1,
+      virtual Complex uc6(const Harmonic n1,
 			  const Harmonic n2,
 			  const Harmonic n3,
 			  const Harmonic n4,
@@ -267,7 +262,7 @@ namespace correlations {
       {
 	const Real c2   = 2;
 	const Real c6   = 6;
-	const Real c24  = 6;
+	const Real c24  = 24;
 	const Real c120 = 120;
 	return (_q(n1,1)*_q(n2,1)*_q(n3,1)*_q(n4,1)*_q(n5,1)*_q(n6,1)
 		- _q(n1+n2,2)*_q(n3,1)*_q(n4,1)*_q(n5,1)*_q(n6,1)
@@ -487,7 +482,7 @@ namespace correlations {
        * @return The correlator
        */
 #ifdef CORRELATIONS_CLOSED_ENABLE_U7
-      virtual Complex U7(const Harmonic n1,
+      virtual Complex uc7(const Harmonic n1,
 			  const Harmonic n2,
 			  const Harmonic n3,
 			  const Harmonic n4,
@@ -499,7 +494,7 @@ namespace correlations {
 	const Real c4   = 4;
 	const Real c6   = 6;
 	const Real c12  = 12;
-	const Real c24  = 6;
+	const Real c24  = 24;
 	const Real c120 = 120;
 	const Real c720 = 720;
 	return (_q(n1,1)*_q(n2,1)*_q(n3,1)*_q(n4,1)*_q(n5,1)*_q(n6,1)*_q(n7,1)
@@ -1381,7 +1376,7 @@ namespace correlations {
 		+ c720*_q(n1+n2+n3+n4+n5+n6+n7,7));
       }
 #else
-      virtual Complex U7(const Harmonic,
+      virtual Complex uc7(const Harmonic,
 			  const Harmonic,
 			  const Harmonic,
 			  const Harmonic,
@@ -1389,12 +1384,12 @@ namespace correlations {
 			  const Harmonic,
 			  const Harmonic) const
       {
-	std::cerr << "closed-form U{7} disabled at compile-time" << std::endl;
+	std::cerr << "closed-form un-corrected 7-paritlce correlator disabled at compile-time" << std::endl;
 	return Complex(0,0);
       }
 #endif // CORRELATIONS_CLOSED_IGNORE_U7
 #ifdef CORRELATIONS_CLOSED_ENABLE_U8
-      Complex U8p1(const Harmonic n1,
+      Complex uc8P1(const Harmonic n1,
 		    const Harmonic n2,
 		    const Harmonic n3,
 		    const Harmonic n4,
@@ -2414,7 +2409,7 @@ namespace correlations {
 		+ _q(n2+n4,2)*_q(n3+n6,2)*_q(n5+n7,2)*_q(n1+n8,2));
       }
 
-      Complex U8p2(const Harmonic n1,
+      Complex uc8P2(const Harmonic n1,
 		    const Harmonic n2,
 		    const Harmonic n3,
 		    const Harmonic n4,
@@ -3433,7 +3428,7 @@ namespace correlations {
 		- c4*_q(n2+n5+n6,3)*_q(n1+n7,2)*_q(n3+n4+n8,3)
 		- c2*_q(n1,1)*_q(n5,1)*_q(n6,1)*_q(n2+n7,2)*_q(n3+n4+n8,3));
       }
-      Complex U8p3(const Harmonic n1,
+      Complex uc8P3(const Harmonic n1,
 		    const Harmonic n2,
 		    const Harmonic n3,
 		    const Harmonic n4,
@@ -4452,7 +4447,7 @@ namespace correlations {
 		+ c2*_q(n1,1)*_q(n2,1)*_q(n3,1)*_q(n5,1)*_q(n7,1)*_q(n4+n6+n8,3)
 		- c2*_q(n1+n2,2)*_q(n3,1)*_q(n5,1)*_q(n7,1)*_q(n4+n6+n8,3));
       }
-      Complex U8p4(const Harmonic n1,
+      Complex uc8P4(const Harmonic n1,
 		    const Harmonic n2,
 		    const Harmonic n3,
 		    const Harmonic n4,
@@ -5628,7 +5623,7 @@ namespace correlations {
        * @return The correlator
        */
 #ifdef CORRELATIONS_CLOSED_ENABLE_U8
-      Complex U8(const Harmonic n1,
+      Complex uc8(const Harmonic n1,
 		  const Harmonic n2,
 		  const Harmonic n3,
 		  const Harmonic n4,
@@ -5637,13 +5632,13 @@ namespace correlations {
 		  const Harmonic n7,
 		  const Harmonic n8) const
       {
-	return (U8p1(n1,n2,n3,n4,n5,n6,n7,n8)
-		+ U8p2(n1,n2,n3,n4,n5,n6,n7,n8)
-		+ U8p3(n1,n2,n3,n4,n5,n6,n7,n8)
-		+ U8p4(n1,n2,n3,n4,n5,n6,n7,n8));
+	return (uc8P1(n1,n2,n3,n4,n5,n6,n7,n8)
+		+ uc8P2(n1,n2,n3,n4,n5,n6,n7,n8)
+		+ uc8P3(n1,n2,n3,n4,n5,n6,n7,n8)
+		+ uc8P4(n1,n2,n3,n4,n5,n6,n7,n8));
       }
 #else
-      Complex U8(const Harmonic,
+      Complex uc8(const Harmonic,
 		  const Harmonic,
 		  const Harmonic,
 		  const Harmonic,
@@ -5652,7 +5647,7 @@ namespace correlations {
 		  const Harmonic,
 		  const Harmonic) const
       {
-	std::cerr << "closed-form U{7} disabled at compile-time" << std::endl;
+	std::cerr << "closed-form un-correted 8-particle correlator disabled at compile-time" << std::endl;
 	return Complex(0,0);
       }
 #endif // CORRELATIONS_CLOSED_IGNORE_U8

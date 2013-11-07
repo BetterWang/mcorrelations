@@ -9,13 +9,8 @@
  *
  * Copyright (c) 2013 Christian Holm Christensen
  */
-#include <correlations/QVector.hh>
-#include <correlations/Types.hh>
 #include <correlations/FromQVector.hh>
-#include <algorithm>
-#include <numeric>
-#include <iterator>
-#include <iomanip>
+
 
 namespace correlations {
   /**
@@ -86,12 +81,12 @@ namespace correlations {
        *
        * @return @f$ QC{n}@f$
        */
-      Complex UN(const Size n, const HarmonicVector& h) const
+      Complex ucN(const Size n, const HarmonicVector& h) const
       {
         SizeVector cnt(n);
         HarmonicVector hh(h);
         std::fill(cnt.begin(), cnt.end(), 1);
-        return UN2(n, hh, cnt);
+        return ucN2(n, hh, cnt);
       }
       /**
        * Calculate the multi-particle correlation
@@ -103,20 +98,20 @@ namespace correlations {
        *
        * @return @f$ QC{n}@f$
        */
-      Complex UN2(const Size n, HarmonicVector& h, SizeVector& cnt) const
+      Complex ucN2(const Size n, HarmonicVector& h, SizeVector& cnt) const
       {
         Size    j = n-1;
         Complex c = _q(h[j], cnt[j]);
         if (n == 1) return c;
 
-        c *= UN2(j, h, cnt);
+        c *= ucN2(j, h, cnt);
 
         if (cnt[j] > 1) return c;
 
         for (Size i = 0; i < (n-1); i++) {
           h[i]   += h[j];
           cnt[i] =  cnt[i] + 1;
-          c      -= Real(cnt[i] - 1) * UN2(j, h, cnt);
+          c      -= Real(cnt[i] - 1) * ucN2(j, h, cnt);
 
           cnt[i]--;
           h[i] -= h[j];

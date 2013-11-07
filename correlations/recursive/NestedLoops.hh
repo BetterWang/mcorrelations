@@ -9,9 +9,6 @@
  *
  * Copyright (c) 2013 Christian Holm Christensen
  */
-#include <vector>
-#include <cmath>
-#include <correlations/Types.hh>
 #include <correlations/NestedLoops.hh>
 
 namespace correlations {
@@ -82,7 +79,7 @@ namespace correlations {
        *
        * @return The correlator and the summed weights
        */
-      Result multi(const Size n, const HarmonicVector& h) const
+      Result cN(const Size n, const HarmonicVector& h) const
       {
 	Complex  c;
 	Real     sumw = 0;
