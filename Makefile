@@ -54,7 +54,7 @@ EXTRA		:= Makefile 				\
 		   style.css				\
 		   data/ante.mc
 
-%.o:correlations/test/%.cc
+%.o:correlations/progs/%.cc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< 
 
 %.o:correlations/test/%.C
@@ -94,17 +94,17 @@ retest:
 	rm -f *.dat 
 	$(MAKE) test
 
-Test.o: correlations/test/Test.C 
+Test.o: correlations/progs/Test.C 
 Test.o:	CPPFLAGS:=$(CPPFLAGS) $(ROOTCFLAGS) -DAS_PROG
 Test.o:	CXXFLAGS:=$(filter-out, -pedantic, $(CXXFLAGS))
 Test:	LDFLAGS:=$(LDFLAGS) $(ROOTLIBS) 
 
 analyze:	analyze.o
-analyze.o:	correlations/test/analyze.cc $(HEADERS) \
+analyze.o:	correlations/progs/analyze.cc $(HEADERS) \
 		correlations/test/Tester.hh		\
 		correlations/test/Printer.hh
 write:		write.o
-write.o:	correlations/test/write.cc 		\
+write.o:	correlations/progs/write.cc 		\
 		correlations/Types,hh			\
 		correlations/test/Random,hh		\
 		correlations/test/Distribution,hh	\
@@ -113,7 +113,7 @@ write.o:	correlations/test/write.cc 		\
 		correlations/test/Printer.hh 		\
 		correlations/test/WriteData.hh 
 compare:	compare.o
-compare.o:	correlations/test/compare.cc 		\
+compare.o:	correlations/progs/compare.cc 		\
 		correlations/Types,hh			\
 		correlations/test/Printer.hh		
 print:		print.o
