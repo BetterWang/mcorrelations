@@ -46,16 +46,17 @@ namespace correlations {
           return false;
         }
         Size maxH = std::max(h1.size(), h2.size());
-        if (maxH <= 0) {
+        if (maxH <= 1) {
           std::cerr << "Nothing to compare" << std::endl;
           return false;
         }
+        maxH--;
         if (h1.size() != h2.size()) std::cerr
             << "Inconsistent number of harmonics, only using " << maxH
             << std::endl;
 
         bool ret = true;
-        for (Size i = 0; i < maxH; i++) {
+        for (Size i = 0; i <= maxH; i++) {
           if (h1[i] != h2[i]) {
             std::cerr << "Harmonic # " << i + 2 << " inconsistent: " << h1[i]
                       << " != " << h2[i] << std::endl;
