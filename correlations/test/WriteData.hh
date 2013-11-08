@@ -4,60 +4,61 @@
  * @file   correlations/test/WriteData.hh
  * @author Christian Holm Christensen <cholm@nbi.dk>
  * @date   Thu Oct 24 23:45:40 2013
- * 
+ *
  * @brief  Example event generator
- * 
- * Copyright (c) 2013 Christian Holm Christensen 
+ *
+ * Copyright (c) 2013 Christian Holm Christensen
  */
 #include <correlations/Types.hh>
 #include <correlations/test/Random.hh>
 #include <correlations/test/Distribution.hh>
 #include <correlations/test/Weights.hh>
 #include <correlations/test/Stopwatch.hh>
+#include <fstream>
 
 namespace correlations {
   /**
-   * Namespace for testing code 
+   * Namespace for testing code
    */
   namespace test {
-    /** 
+    /**
      * Example generator
      *
-     * @code 
+     * @code
      * std::ofstream out("data.dat");
      * correlations::test::WriteData w(20,30);
      *
      * w.Run(out, nEvents);
-     * @endcode 
+     * @endcode
      *
-     * @headerfile "" <correlations/test/WriteData.hh> 
+     * @headerfile "" <correlations/test/WriteData.hh>
      */
     struct WriteData
     {
       WriteData(Size minN, Size maxN)
-	: _d(), 
-	  _w(), 
-	  _minN(minN), 
+	: _d(),
+	  _w(),
+	  _minN(minN),
 	  _maxN(maxN)
       {}
-      /** 
-       * Create one event 
-       * 
+      /**
+       * Create one event
+       *
        * @param o  Output stream
-       * @param ev Event number 
+       * @param ev Event number
        */
       void event(std::ostream& o, Size ev)
       {
 	_d.setup(Random::asReal(0, 2 * M_PI));
 
 	Size mult = Random::asSize(_minN, _maxN);
-    
+
 	// Write out a header:
 	//   -1  multiplicity event_no phiR
 	o << -1 << "\t" << mult << "\t" << ev << "\t" << _d._v[0] << std::endl;
 
-	// Generate observations 
-	for (Size ipart = 0; ipart < mult; ipart++) { 
+	// Generate observations
+	for (Size ipart = 0; ipart < mult; ipart++) {
 	  Real phi    = _d.random();
 	  Real weight = _w.eval(phi);
 
@@ -65,24 +66,24 @@ namespace correlations {
 	  //   no phi weight
 	  o << ipart << "\t" << phi << "\t" << weight << std::endl;
 	}
-	// Write trailer: 
-	//   -2 multiplicity event_no 
+	// Write trailer:
+	//   -2 multiplicity event_no
 	o << -2 << "\t" << mult << "\t" << ev << std::endl;
       }
-      /** 
+      /**
        * Run a job
-       * 
-       * @code 
+       *
+       * @code
        * WriteData w(800, 1000);
        * w.Run(std::cout, 100, false);
        * @endcode
-       * 
+       *
        * @param o          Output stream
-       * @param nEvents    Number of events to make 
+       * @param nEvents    Number of events to make
        * @param verb       Wheter to print progress to standard output
-       * @param prec       Precision to use 
+       * @param prec       Precision to use
        */
-      void run(std::ostream& o, Size nEvents, bool verb=true, Size prec=16) 
+      void run(std::ostream& o, Size nEvents, bool verb=true, Size prec=16)
       {
 	Size oprec = o.precision();
 	o.precision(prec);
@@ -91,11 +92,11 @@ namespace correlations {
 	  << "# nEvents=" << nEvents << '\n'
 	  << "# mult in [" << _minN << "," << _maxN << ")\n"
 	  << "# flow parameters:\n";
-	for (Size par = 1; par < 7; par++) 
+	for (Size par = 1; par < 7; par++)
 	  o << "#  v" << par << ": " << _d._v[par] << "\n";
-	o << std::flush;  
-	
-	for (Size ev = 0; ev < nEvents; ev++) { 
+	o << std::flush;
+
+	for (Size ev = 0; ev < nEvents; ev++) {
 	  bool print = (verb && ((ev+1) % (nEvents/10)) == 0);
 	  if (print) std::cout << "Event # " << (ev+1) << " ... " << std::flush;
 	  event(o, ev);
@@ -104,24 +105,24 @@ namespace correlations {
 	o << "# EOF" << std::endl;
 	o.precision(oprec);
       }
-      /** 
+      /**
        * Run a job
-       * 
-       * @code 
+       *
+       * @code
        * WriteData w(800, 1000);
        * w.Run("data.dat", 100, true);
        * @endcode
        *
        * @param outfile  Output file to write to
-       * @param nEvents  Number of events to make 
+       * @param nEvents  Number of events to make
        * @param verb     Wheter to print progress to standard output
-       * @param prec     Precision to use 
+       * @param prec     Precision to use
        */
-      void run(const std::string& outfile, Size nEvents, bool verb=true, 
+      void run(const std::string& outfile, Size nEvents, bool verb=true,
 	       Size prec=32)
       {
 	std::ofstream out(outfile.c_str());
-	if (!out) { 
+	if (!out) {
 	  std::cerr << "Failed to make the output file: " << outfile << std::endl;
 	  return;
 	}

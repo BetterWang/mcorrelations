@@ -46,7 +46,9 @@ PROGS		:= correlations/progs/analyze.cc 		\
 		   correlations/progs/write.cc 			\
 		   correlations/progs/compare.cc 		\
 		   correlations/progs/print.cc			\
-		   correlations/progs/Test.C
+		   correlations/progs/Write.C			\
+		   correlations/progs/Analyze.C			\
+		   correlations/progs/Compare.C			
 EXEC		:= $(notdir $(basename $(PROGS)))
 EXEC_ARGS	:= -L
 EXTRA		:= Makefile 				\
@@ -57,8 +59,9 @@ EXTRA		:= Makefile 				\
 %.o:correlations/progs/%.cc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< 
 
-%.o:correlations/test/%.C
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< 
+%.o:correlations/progs/%.C
+	$(CXX) $(CPPFLAGS)  $(ROOTCFLAGS) -DAS_PROG \
+		$(filter-out, -pedantic, $(CXXFLAGS)) $< 
 
 %:%.o
 	$(LD) $(LDFLAGS) -o $@ $^
@@ -82,7 +85,7 @@ recurrence.dat:data.dat prog closed.dat
 recursive.dat:data.dat prog recurrence.dat
 closed.dat: EXEC_ARGS=-L
 
-recursive.png recurrence.png closed.png:correlations/test/Test.C \
+recursive.png recurrence.png closed.png:correlations/progs/Test.C \
 		data.dat $(HEADERS) $(TESTS)
 	$(ROOT) $(ROOTFLAGS) $<+\(\"$(basename $@)\",$(MAXH),\"data.dat\"\)
 
@@ -94,27 +97,33 @@ retest:
 	rm -f *.dat 
 	$(MAKE) test
 
-Test.o: correlations/progs/Test.C 
-Test.o:	CPPFLAGS:=$(CPPFLAGS) $(ROOTCFLAGS) -DAS_PROG
-Test.o:	CXXFLAGS:=$(filter-out, -pedantic, $(CXXFLAGS))
-Test:	LDFLAGS:=$(LDFLAGS) $(ROOTLIBS) 
+Write.o: 	correlations/progs/Write.C 
+Write:		LDFLAGS:=$(LDFLAGS) $(ROOTLIBS) 
+
+Analyze.o: 	correlations/progs/Analyze.C 
+Analyze:	LDFLAGS:=$(LDFLAGS) $(ROOTLIBS) 
+
+Compare.o: 	correlations/progs/Compare.C 
+Compare:	LDFLAGS:=$(LDFLAGS) $(ROOTLIBS) 
+
+write:		write.o
+write.o:	correlations/progs/write.cc 		\
+		correlations/Types.hh			\
+		correlations/test/Random.hh		\
+		correlations/test/Distribution.hh	\
+		correlations/test/Weights.hh		\
+		correlations/test/Stopwatch.hh		\
+		correlations/test/Printer.hh 		\
+		correlations/test/WriteData.hh 
 
 analyze:	analyze.o
 analyze.o:	correlations/progs/analyze.cc $(HEADERS) \
 		correlations/test/Tester.hh		\
 		correlations/test/Printer.hh
-write:		write.o
-write.o:	correlations/progs/write.cc 		\
-		correlations/Types,hh			\
-		correlations/test/Random,hh		\
-		correlations/test/Distribution,hh	\
-		correlations/test/Weights,hh		\
-		correlations/test/Stopwatch,hh		\
-		correlations/test/Printer.hh 		\
-		correlations/test/WriteData.hh 
+
 compare:	compare.o
 compare.o:	correlations/progs/compare.cc 		\
-		correlations/Types,hh			\
+		correlations/Types.hh			\
 		correlations/test/Printer.hh		
 print:		print.o
 

@@ -10,6 +10,7 @@
 #include <correlations/Types.hh>
 #include <correlations/test/Printer.hh>
 #include <correlations/test/Comparer.hh>
+#include <fstream>
 
 /**
  * Show usage information
