@@ -61,7 +61,8 @@ EXTRA		:= Makefile 				\
 
 %.o:correlations/progs/%.C
 	$(CXX) $(CPPFLAGS)  $(ROOTCFLAGS) -DAS_PROG \
-		$(filter-out, -pedantic, $(CXXFLAGS)) $< 
+		$(filter-out -Weffc++, $(filter-out -pedantic, $(CXXFLAGS))) \
+		$< 
 
 %:%.o
 	$(LD) $(LDFLAGS) -o $@ $^
@@ -73,12 +74,22 @@ all:	$(EXEC)
 
 data.dat:write
 	@echo "=== Generating data file ======================="
-	./$<  -e 10 -m 8 -M 10 -o $@
+	@./$<  -e 10 -m 8 -M 10 -o $@
 	@echo ""
 
 closed.dat recurrence.dat recursive.dat:data.dat analyze
 	@echo "=== Analysing using $(basename $@) ======================="
 	./analyze -t $(basename $@) -i $< -o $@ -n 6 -L 
+	@echo ""
+
+data.root:Write
+	@echo "=== Generating data file ======================="
+	./$<  -e 10 -m 8 -M 10 
+	@echo ""
+
+closed.root recurrence.root recursive.root:data.root Analyze
+	@echo "=== Analysing using $(basename $@) ======================="
+	./Analyze -t $(basename $@) -n 6 -L -B 
 	@echo ""
 
 recurrence.dat:data.dat prog closed.dat
@@ -89,9 +100,13 @@ recursive.png recurrence.png closed.png:correlations/progs/Test.C \
 		data.dat $(HEADERS) $(TESTS)
 	$(ROOT) $(ROOTFLAGS) $<+\(\"$(basename $@)\",$(MAXH),\"data.dat\"\)
 
-test:	recursive.dat  compare
+test:	recursive.dat recurrence.dat closed.dat compare
 	-./compare -a recurrence.dat -b closed.dat
 	-./compare -a recursive.dat  -b closed.dat
+
+Test:	recursive.root recurrence.root closed.root Compare
+	./Compare -1 recurrence -2 closed
+	./Compare -1 recursive  -2 closed
 
 retest:
 	rm -f *.dat 

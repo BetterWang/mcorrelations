@@ -32,6 +32,19 @@ class TFile;
 class TCanvas;
 #endif
 
+void DrawInPad(TVirtualPad* p,
+               Int_t sub,
+               TH1* h,
+               Bool_t logy=false)
+{
+  TVirtualPad* pp = p->cd(sub);
+  pp->SetRightMargin(0.02);
+  if (logy) pp->SetLogy();
+  TH1* copy = h->DrawCopy("hist");
+  copy->GetXaxis()->SetLabelSize(0.13);
+  copy->GetYaxis()->SetLabelSize(0.08);
+  copy->SetDirectory(0);
+}
 /**
  * A test
  *
@@ -55,7 +68,6 @@ Analyze(const TString& mode="CLOSED",
 
 #endif
 
-  gRandom->SetSeed(54321);
 
   // --- Some histograms ---------------------------------------------
   TH1*      reals  = new TH1D("reals", "Re(C{n})", maxH-2+1, 2, maxH+1);
@@ -93,6 +105,7 @@ Analyze(const TString& mode="CLOSED",
   tree->SetBranchAddress("event", &phiR);
 
   // --- Setup of harmonics, etc -------------------------------------
+  gRandom->SetSeed(54321);
   UShort_t emode = 0;
   if      (mode.EqualTo("closed",     TString::kIgnoreCase)) emode = 0;
   else if (mode.EqualTo("recurrence", TString::kIgnoreCase)) emode = 1;
@@ -162,25 +175,9 @@ Analyze(const TString& mode="CLOSED",
   can->SetRightMargin(0.03);
   can->Divide(1,3, 0, 0);
 
-  TVirtualPad* p = can->cd(3);
-  p->SetRightMargin(0.01);
-  p->SetLogy();
-  TH1* copy = timing->DrawCopy("hist e");
-  copy->GetXaxis()->SetLabelSize(0.13);
-  copy->GetYaxis()->SetLabelSize(0.08);
-
-
-  p = can->cd(1);
-  p->SetRightMargin(0.01);
-  copy = reals->DrawCopy("hist");
-  copy->GetXaxis()->SetLabelSize(0.13);
-  copy->GetYaxis()->SetLabelSize(0.08);
-
-  p = can->cd(2);
-  p->SetRightMargin(0.01);
-  copy = imags->DrawCopy("hist");
-  copy->GetXaxis()->SetLabelSize(0.13);
-  copy->GetYaxis()->SetLabelSize(0.08);
+  DrawInPad(can, 3, timing, true);
+  DrawInPad(can, 1, reals);
+  DrawInPad(can, 2, imags);
 
   can->cd(0);
   TLatex* ltx = new TLatex(0.5,0.995,c->name());
@@ -198,6 +195,16 @@ Analyze(const TString& mode="CLOSED",
   out.ToLower();
   out.Append(".root");
   file = TFile::Open(out, "RECREATE");
+
+  UShort_t nh = h.size();
+  TH1* hs = new TH1I("h", "Harmonics", nh, 1.5, nh+1.5);
+  hs->SetFillColor(kMagenta+1);
+  hs->SetFillStyle(3001);
+  for (UShort_t i = 1; i <= nh; i++) {
+    hs->GetXaxis()->SetBinLabel(i,Form("h_{%d}", i));
+    hs->SetBinContent(i, h[i-1]);
+  }
+
   imags->Write();
   reals->Write();
   timing->Write();
@@ -226,7 +233,6 @@ void usage(const char* progname)
 int
 main(int argc, char** argv)
 {
-  bool           recursive = true;
   bool           loops     = true;
   bool           batch     = false;
   unsigned short maxH      = 6;
