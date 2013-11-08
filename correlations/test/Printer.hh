@@ -23,7 +23,7 @@ namespace correlations
        */
       enum
       {
-        TITLEW = 11, COMPLEXW = 27, TIMINGW = 12
+        TITLEW = 6, COMPLEXW = 27, TIMINGW = 16
       };
       /**
        * Print column title
@@ -37,7 +37,7 @@ namespace correlations
       title(std::ostream& out, const char* c1, const char* c2,
           const char* t1 = 0, const char* t2 = 0)
       {
-        out << std::left << std::setw(TITLEW) << "N-particle" << " |" << "A: "
+        out << std::left << std::setw(TITLEW) << "N-part" << " |" << "A: "
             << std::setw(COMPLEXW - 3) << c1 << " |" << "B: "
             << std::setw(COMPLEXW - 3) << c2 << " |" << std::setw(COMPLEXW)
             << "Difference (B-A)" << " |";
@@ -79,7 +79,7 @@ namespace correlations
         bool ret = true;
         if (std::norm(c2) != 0 && std::norm(c1) != 00
             && (fabs((c2.real() - c1.real()) / c1.real()) > 1e-6
-                || fabs((c2.imag() - c1.imag()) / c2.imag()) > 1e-6))
+                || fabs((c2.imag() - c1.imag()) / c1.imag()) > 1e-6))
           {
             out << " > (1e-6,1e-6)";
             ret = false;

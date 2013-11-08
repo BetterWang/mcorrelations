@@ -55,6 +55,7 @@ Analyze(const TString& mode="CLOSED",
 
 #endif
 
+  gRandom->SetSeed(54321);
 
   // --- Some histograms ---------------------------------------------
   TH1*      reals  = new TH1D("reals", "Re(C{n})", maxH-2+1, 2, maxH+1);
@@ -234,6 +235,7 @@ main(int argc, char** argv)
   for (int i = 1; i < argc; i++) {
     if (argv[i][0] == '-') {
       switch (argv[i][1]) {
+      case 'h': usage(argv[0]); return 0;
       case 't': mode      = argv[++i];  break;
       case 'l': loops     = false; break;
       case 'L': loops     = true; break;
