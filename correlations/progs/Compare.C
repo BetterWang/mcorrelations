@@ -85,6 +85,7 @@ void DrawTwoInPad(TVirtualPad* p,
     copy->GetXaxis()->SetLabelSize(0.13);
     copy->GetYaxis()->SetLabelSize(0.08);
     copy->SetDirectory(0);
+    ph++;
   }
 }
 void
@@ -127,7 +128,7 @@ Compare(const TString& mode1,
     DrawInPad(can, 4, td);
     DrawInPad(can, 3, id);
     DrawInPad(can, 2, rd);
-    DrawInPad(can, 1, hd);
+    // DrawInPad(can, 1, hd);
 
     can->cd(0);
     TLatex* ltx = new TLatex(
