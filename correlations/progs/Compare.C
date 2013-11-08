@@ -45,7 +45,7 @@ GetHistos(const TString& mode,
   real->SetDirectory(0);
   imag->SetDirectory(0);
   time->SetDirectory(0);
-
+  h->SetDirectory(0);
   file->Close();
 
   return true;
@@ -79,9 +79,13 @@ void DrawTwoInPad(TVirtualPad* p,
   TH1** ph = hs;
   while (*ph) {
     TString opt("hist");
-    if (ph != hs) opt.Append(" same");
+    (*ph)->SetFillStyle(3004);
+    if (ph != hs) {
+      opt.Append(" same");
+      (*ph)->SetFillStyle(3005);
+    }
 
-    TH1* copy = h1->DrawCopy(opt);
+    TH1* copy = (*ph)->DrawCopy(opt);
     copy->GetXaxis()->SetLabelSize(0.13);
     copy->GetYaxis()->SetLabelSize(0.08);
     copy->SetDirectory(0);
@@ -128,7 +132,7 @@ Compare(const TString& mode1,
     DrawInPad(can, 4, td);
     DrawInPad(can, 3, id);
     DrawInPad(can, 2, rd);
-    // DrawInPad(can, 1, hd);
+    DrawInPad(can, 1, hd);
 
     can->cd(0);
     TLatex* ltx = new TLatex(
