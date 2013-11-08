@@ -88,6 +88,21 @@ namespace correlations
         return ret;
       }
     };
+    /**
+     * Print a help-line
+     *
+     * @param out Output stream
+     * @param o   Option character
+     * @param arg Dummy argument
+     * @param txt Description
+     * @param def Default value
+     */
+    void helpline(std::ostream& out, char o, const char* arg, const char* txt, const char* def)
+    {
+      out << "  -" << o << " " << std::left << std::setw(8) << arg
+                << "  " << std::setw(30) << txt << " [" << def << "]"
+                << std::right << std::endl;
+    }
   }
 }
 

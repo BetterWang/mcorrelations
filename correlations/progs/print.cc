@@ -1,5 +1,5 @@
 /**
- * @file   print.cc
+ * @file   correlations/progs/print.cc
  * @author Christian Holm Christensen <cholm@nbi.dk>
  * @date   Mon Oct 28 10:39:32 2013
  *

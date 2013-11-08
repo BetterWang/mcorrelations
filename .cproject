@@ -41,7 +41,7 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.toolchain.gnu.base.476436774.1474932078" name="Test.C" rcbsApplicability="disable" resourcePath="correlations/test/Test.C" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.base.368376961.1810900258">
+					<fileInfo id="cdt.managedbuild.toolchain.gnu.base.476436774.1474932078" name="Test.C" rcbsApplicability="disable" resourcePath="correlations/progs/Test.C" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.base.368376961.1810900258">
 						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.368376961.1810900258" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base.368376961">
 							<option id="gnu.cpp.compiler.option.preprocessor.def.1854478950" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 								<listOptionValue builtIn="false" value="AS_PROG=1"/>
@@ -98,7 +98,7 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.toolchain.gnu.base.476436774.2811346.299970368" name="Test.C" rcbsApplicability="disable" resourcePath="correlations/test/Test.C" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.base.1854582374.2041474159">
+					<fileInfo id="cdt.managedbuild.toolchain.gnu.base.476436774.2811346.299970368" name="Test.C" rcbsApplicability="disable" resourcePath="correlations/progs/Test.C" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.base.1854582374.2041474159">
 						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1854582374.2041474159" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base.1854582374">
 							<option id="gnu.cpp.compiler.option.preprocessor.def.76716948" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 								<listOptionValue builtIn="false" value="AS_PROG=1"/>

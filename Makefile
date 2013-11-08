@@ -1,7 +1,7 @@
 
 
 NAME		:= correlations
-VERSION		:= 0.2
+VERSION		:= 0.3
 
 ROOT		:= root
 ROOTFLAGS	:= -l -b -q 
@@ -42,11 +42,11 @@ TESTS		:= correlations/test/Distribution.hh		\
 		   correlations/test/Tester.hh			\
 		   correlations/test/Printer.hh			\
 		   correlations/test/Comparer.hh		
-PROGS		:= correlations/test/analyze.cc 		\
-		   correlations/test/write.cc 			\
-		   correlations/test/compare.cc 		\
-		   correlations/test/print.cc			\
-		   correlations/test/Test.C
+PROGS		:= correlations/progs/analyze.cc 		\
+		   correlations/progs/write.cc 			\
+		   correlations/progs/compare.cc 		\
+		   correlations/progs/print.cc			\
+		   correlations/progs/Test.C
 EXEC		:= $(notdir $(basename $(PROGS)))
 EXEC_ARGS	:= -L
 EXTRA		:= Makefile 				\
@@ -82,7 +82,8 @@ recurrence.dat:data.dat prog closed.dat
 recursive.dat:data.dat prog recurrence.dat
 closed.dat: EXEC_ARGS=-L
 
-recursive.png recurrence.png closed.png:correlations/test/Test.C data.dat $(HEADERS) $(TESTS)
+recursive.png recurrence.png closed.png:correlations/test/Test.C \
+		data.dat $(HEADERS) $(TESTS)
 	$(ROOT) $(ROOTFLAGS) $<+\(\"$(basename $@)\",$(MAXH),\"data.dat\"\)
 
 test:	recursive.dat  compare
@@ -99,11 +100,22 @@ Test.o:	CXXFLAGS:=$(filter-out, -pedantic, $(CXXFLAGS))
 Test:	LDFLAGS:=$(LDFLAGS) $(ROOTLIBS) 
 
 analyze:	analyze.o
-analyze.o:	correlations/test/analyze.cc $(HEADERS) $(TESTS)
+analyze.o:	correlations/test/analyze.cc $(HEADERS) \
+		correlations/test/Tester.hh		\
+		correlations/test/Printer.hh
 write:		write.o
-write.o:	correlations/test/write.cc $(HEADERS) $(TESTS)
+write.o:	correlations/test/write.cc 		\
+		correlations/Types,hh			\
+		correlations/test/Random,hh		\
+		correlations/test/Distribution,hh	\
+		correlations/test/Weights,hh		\
+		correlations/test/Stopwatch,hh		\
+		correlations/test/Printer.hh 		\
+		correlations/test/WriteData.hh 
 compare:	compare.o
-compare.o:	correlations/test/compare.cc $(HEADERS) $(TESTS)
+compare.o:	correlations/test/compare.cc 		\
+		correlations/Types,hh			\
+		correlations/test/Printer.hh		
 print:		print.o
 
 Doxyfile:Doxyfile.in 
@@ -114,8 +126,8 @@ doc:	Doxyfile $(HEADERS) $(TESTS) $(PROGS)
 
 clean:
 	find . -name "*~" -or -name "*_C.*" -or -name "*_hh.*" | xargs rm -f
-	rm -f core.* TAGS *~ *.o *.png *.vlg Test.png Doxyfile
-	rm -f *_C.* recursive.dat closed.dat data.dat prog print Test
+	rm -f core.* TAGS *.o *.png *.vlg *.dat 
+	rm -f analyze compare write print Test Test.png Doxyfile
 	rm -rf html $(NAME)-$(VERSION) $(NAME)-$(VERSION).tar.gz TAGS
 
 dist:

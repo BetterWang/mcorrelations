@@ -1,5 +1,5 @@
 /**
- * @file   correlations/test/compare.cc
+ * @file   correlations/progs/compare.cc
  * @author Christian Holm Christensen <cholm@nbi.dk>
  * @date   Thu Oct 24 23:45:40 2013
  *
@@ -8,8 +8,7 @@
  * Copyright (c) 2013 Christian Holm Christensen
  */
 #include <correlations/Types.hh>
-#include <correlations/Result.hh>
-#include <correlations/test/Tester.hh>
+#include <correlations/test/Printer.hh>
 #include <correlations/test/Comparer.hh>
 
 /**
