@@ -1,7 +1,7 @@
 #ifndef CORRELATIONS_RECURRANCE_FROMQVECTOR_HH
 #define CORRELATIONS_RECURRANCE_FROMQVECTOR_HH
 /**
- * @file   correlations/recurrance/FromQVector.hh
+ * @file   correlations/recurrence/FromQVector.hh
  * @author Christian Holm Christensen <cholm@nbi.dk>
  * @date   Thu Oct 24 23:45:40 2013
  *
@@ -27,7 +27,7 @@ namespace correlations {
      * QC\{n\}@f$ or - for a limited number of @f$ n@f$ specific
      * recursive functions.
      *
-     * @headerfile ""  <correlations/recurrance/FromQVector.hh>
+     * @headerfile ""  <correlations/recurrence/FromQVector.hh>
      */
     struct FromQVector : public correlations::FromQVector
     {

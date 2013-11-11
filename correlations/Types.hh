@@ -108,16 +108,16 @@
  *
  * - <a href="print_8cc-example.html">print.cc</a> - Print the
  *   recursive expressions for the @f$Q@f$-cumulant
- * - <a href="prog_8cc-example.html">prog.ccC</a> - A program to
+ * - <a href="analyze_8cc-example.html">analyze.ccC</a> - A program to
  *   generate and analyse the data using various techniques.
- * - <a href="_test_8_c-example.html">Test.C</a> - A ROOT based script
+ * - <a href="_analyze_8_c-example.html">Analyze.C</a> - A ROOT based script
  *   example.
  *
- * @example prog.cc A simple program that checks the algorithms
+ * @example analyze.cc A simple program that checks the algorithms
  * against each other.  Note that this used the class test::Test,
  * test::Distribution, test::Random, and test::Generator.
  *
- * @example Test.C A ROOT-based script to illustrate the use of
+ * @example Analyze.C A ROOT-based script to illustrate the use of
  * the code in ROOT
  *
  * @example print.cc A simple program that dumps the expressions for

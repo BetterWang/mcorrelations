@@ -79,21 +79,21 @@ data.dat:write
 
 closed.dat recurrence.dat recursive.dat:data.dat analyze
 	@echo "=== Analysing using $(basename $@) ======================="
-	./analyze -t $(basename $@) -i $< -o $@ -n 6 -L 
+	@./analyze -t $(basename $@) -i $< -o $@ -n 6 -L 
 	@echo ""
 
 data.root:Write
 	@echo "=== Generating data file ======================="
-	./$<  -e 10 -m 8 -M 10 
+	@./$<  -e 10 -m 8 -M 10 
 	@echo ""
 
 closed.root recurrence.root recursive.root:data.root Analyze
 	@echo "=== Analysing using $(basename $@) ======================="
-	./Analyze -t $(basename $@) -n 6 -L -B 
+	@./Analyze -t $(basename $@) -n 6 -L -B 
 	@echo ""
 
-recurrence.dat:data.dat prog closed.dat
-recursive.dat:data.dat prog recurrence.dat
+recurrence.dat:data.dat analyze closed.dat
+recursive.dat:data.dat analyze recurrence.dat
 closed.dat: EXEC_ARGS=-L
 
 recursive.png recurrence.png closed.png:correlations/progs/Test.C \
@@ -105,8 +105,8 @@ test:	recursive.dat recurrence.dat closed.dat compare
 	-./compare -a recursive.dat  -b closed.dat
 
 Test:	recursive.root recurrence.root closed.root Compare
-	./Compare -1 recurrence -2 closed
-	./Compare -1 recursive  -2 closed
+	./Compare -1 recurrence -2 closed -B
+	./Compare -1 recursive  -2 closed -B
 
 retest:
 	rm -f *.dat 

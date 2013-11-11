@@ -57,7 +57,7 @@ namespace correlations {
       /**
        * Start the stop-watch
        *
-       * @param reset If true, reset stop-watch before starting
+       * @param rst If true, reset stop-watch before starting
        */
       void start(bool rst)
       {

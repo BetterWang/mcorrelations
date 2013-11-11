@@ -1,7 +1,7 @@
 #ifndef CORRELATIONS_TEST_Comparer_HH
 #define CORRELATIONS_TEST_Comparer_HH
 /**
- * @file   correlations/test/Tester.hh
+ * @file   correlations/test/Comparer.hh
  * @author Christian Holm Christensen <cholm@nbi.dk>
  * @date   Thu Oct 24 23:45:40 2013
  *
@@ -14,6 +14,9 @@
 
 namespace correlations {
   namespace test {
+    /** 
+     * Compare results stored in two streams
+     */
     struct Comparer
     {
       /**

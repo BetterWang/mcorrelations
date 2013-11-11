@@ -67,12 +67,39 @@ Analyze(const TString& mode="CLOSED",
   gROOT->LoadMacro("correlations/test/ReadData.hh++");
 
 #endif
+  // --- Setup of harmonics, etc -------------------------------------
+  gRandom->SetSeed(54321);
+  UShort_t emode = 0;
+  if      (mode.EqualTo("closed",     TString::kIgnoreCase)) emode = 0;
+  else if (mode.EqualTo("recurrence", TString::kIgnoreCase)) emode = 1;
+  else if (mode.EqualTo("recursive",  TString::kIgnoreCase)) emode = 2;
+  else
+    Warning("Analyze", "Mode %s unknown, assuming CLOSED", mode.Data());
+
+  correlations::QVector        q(0,0,false);
+  correlations::FromQVector*   c;
+  correlations::HarmonicVector h(maxH);
+  for (UShort_t i = 0; i < maxH; i++) {
+    // Generate random harmonicx
+    h[i] = -6 + gRandom->Integer(12);
+    Printf("h_%d:\t%d", i, h[i]);
+  }
+
+  // Resize the Q-vector to fit the harmonics
+  q.resize(h);
+  switch (emode) {
+  case 0: c = new correlations::closed::FromQVector(q); break;
+  case 1: c = new correlations::recurrence::FromQVector(q); break;
+  case 2: c = new correlations::recursive::FromQVector(q); break;
+  }
+  Printf("Correlator: %s", c->name());
 
 
   // --- Some histograms ---------------------------------------------
-  TH1*      reals  = new TH1D("reals", "Re(C{n})", maxH-2+1, 2, maxH+1);
+  TH1*      reals  = new TH1D("reals", "Re(C{n})", maxH-2+1, 2+.5, maxH+1+.5);
   TH1*      imags  = static_cast<TH1*>(reals->Clone("imags"));
-  TProfile* timing = new TProfile("timing", "Timing", maxH-2+1, 2, maxH+1);
+  TProfile* timing = new TProfile("timing", "Timing", maxH-2+1, 2+.5,maxH+1+.5);
+  TH1*      hs     = new TH1I("harmonics", "Harmonics", maxH, 1.5, maxH+1.5);
   reals->SetFillColor(kGreen+1);
   reals->SetFillStyle(3001);
   reals->SetStats(0);
@@ -83,13 +110,19 @@ Analyze(const TString& mode="CLOSED",
   timing->SetFillColor(kRed+1);
   timing->SetFillStyle(3001);
   timing->SetStats(0);
+  hs->SetFillColor(kMagenta+1);
+  hs->SetFillStyle(3001);
+  hs->SetStats(0);
   for (UShort_t i = 0; i < maxH-1; i++) {
     TString label = TString::Format("C{%d}", i+2);
     reals->GetXaxis()->SetBinLabel(i+1, label);
     imags->GetXaxis()->SetBinLabel(i+1, label);
     timing->GetXaxis()->SetBinLabel(i+1, label);
+    hs->GetXaxis()->SetBinLabel(i+1,Form("h_{%d}", i+1));
+    hs->SetBinContent(i+1, h[i]);
   }
-
+  hs->GetXaxis()->SetBinLabel(maxH,Form("h_{%d}", maxH));
+  hs->SetBinContent(maxH, h[maxH-1]);
   TStopwatch timer;
 
   // --- Setup input ------------------------------------------------
@@ -104,30 +137,6 @@ Analyze(const TString& mode="CLOSED",
   tree->SetBranchAddress("weight", &pWeights);
   tree->SetBranchAddress("event", &phiR);
 
-  // --- Setup of harmonics, etc -------------------------------------
-  gRandom->SetSeed(54321);
-  UShort_t emode = 0;
-  if      (mode.EqualTo("closed",     TString::kIgnoreCase)) emode = 0;
-  else if (mode.EqualTo("recurrence", TString::kIgnoreCase)) emode = 1;
-  else if (mode.EqualTo("recursive",  TString::kIgnoreCase)) emode = 2;
-  else
-    Warning("Analyze", "Mode %s unknown, assuming CLOSED", mode.Data());
-
-  correlations::QVector        q(0,0,false);
-  correlations::FromQVector*   c;
-  correlations::HarmonicVector h(maxH);
-  for (UShort_t i = 0; i < maxH; i++)
-    // Generate random harmonicx
-    h[i] = -6 + gRandom->Integer(12);
-
-  // Resize the Q-vector to fit the harmonics
-  q.resize(h);
-  switch (emode) {
-  case 0: c = new correlations::closed::FromQVector(q); break;
-  case 1: c = new correlations::recurrence::FromQVector(q); break;
-  case 2: c = new correlations::recursive::FromQVector(q); break;
-  }
-  Printf("Correlator: %s", c->name());
 
   // --- The results -------------------------------------------------
   const UShort_t             nQ = maxH - 1;
@@ -139,7 +148,7 @@ Analyze(const TString& mode="CLOSED",
   UShort_t nEvents = tree->GetEntries();
   for (UShort_t event = 0; event < nEvents; event++) {
     tree->GetEntry(event);
-    printf("Event # %4d  %4lu particles ", event++, phis.GetSize());
+    printf("Event # %4u  %4d particles ", event++, phis.GetSize());
 
     for (UShort_t pa = 0; pa < phis.GetSize(); pa++)
       q.fill(phis[pa], weights[pa]);
@@ -196,18 +205,11 @@ Analyze(const TString& mode="CLOSED",
   out.Append(".root");
   file = TFile::Open(out, "RECREATE");
 
-  UShort_t nh = h.size();
-  TH1* hs = new TH1I("h", "Harmonics", nh, 1.5, nh+1.5);
-  hs->SetFillColor(kMagenta+1);
-  hs->SetFillStyle(3001);
-  for (UShort_t i = 1; i <= nh; i++) {
-    hs->GetXaxis()->SetBinLabel(i,Form("h_{%d}", i));
-    hs->SetBinContent(i, h[i-1]);
-  }
 
   imags->Write();
   reals->Write();
   timing->Write();
+  hs->Write();
   file->Write();
   file->Close();
 }

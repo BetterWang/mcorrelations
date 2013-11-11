@@ -12,6 +12,8 @@
 # include <TCanvas.h>
 # include <TError.h>
 # include <TLatex.h>
+# include <TLegend.h>
+# include <TLegendEntry.h>
 #else
 class TFile;
 class TH1;
@@ -34,7 +36,7 @@ GetHistos(const TString& mode,
     Error("GetHistos", "Failed to open %s", in.Data());
     return false;
   }
-  h    = static_cast<TH1*>(file->Get("h"));
+  h    = static_cast<TH1*>(file->Get("harmonics"));
   real = static_cast<TH1*>(file->Get("reals"));
   imag = static_cast<TH1*>(file->Get("imags"));
   time = static_cast<TProfile*>(file->Get("timing"));
@@ -45,53 +47,116 @@ GetHistos(const TString& mode,
   real->SetDirectory(0);
   imag->SetDirectory(0);
   time->SetDirectory(0);
-  h->SetDirectory(0);
-  file->Close();
+  h   ->SetDirectory(0);
 
+  real->SetYTitle(mode);
+  imag->SetYTitle(mode);
+  time->SetYTitle(mode);
+  h   ->SetYTitle(mode);
+
+  real->Sumw2();
+  imag->Sumw2();
+  time->Sumw2();
+  h   ->Sumw2();
+
+  file->Close();
   return true;
 }
 
-void DrawInPad(TVirtualPad* p,
-               Int_t sub,
-               TH1* h,
-               Bool_t logy=false)
-{
-  TVirtualPad* pp = p->cd(sub);
-  pp->SetRightMargin(0.02);
-  if (logy) pp->SetLogy();
-  TH1* copy = h->DrawCopy("hist");
-  copy->GetXaxis()->SetLabelSize(0.13);
-  copy->GetYaxis()->SetLabelSize(0.08);
-  copy->SetDirectory(0);
-}
 void DrawTwoInPad(TVirtualPad* p,
-                  Int_t sub,
-                  TH1* h1,
-                  TH1* h2)
+                  Int_t        sub,
+                  TH1*         h1,
+                  TH1*         h2,
+		  Bool_t       ratio,
+		  Bool_t       logy=false,
+		  Bool_t       legend=false)
 {
   TVirtualPad* pp = p->cd(sub);
   pp->SetRightMargin(0.02);
+  pp->SetLeftMargin(0.10);
+  TVirtualPad* ppp = pp;
+  if (ratio) {
+    pp->Divide(1,2,0,0);
+    ppp = pp->cd(1);				
+    ppp->SetRightMargin(0.02);
+  }
+  if (logy) ppp->SetLogy();
   TH1* hs[] = { h1, h2, 0 };
   if (h1->GetMaximum() < h2->GetMaximum()) {
     hs[0] = h2;
     hs[1] = h1;
   }
   TH1** ph = hs;
+  Double_t size = (ratio ? 0.1 : 0.05);
+  Double_t off  = (ratio ? 0.6 : 0.5);
+  h1->SetFillStyle(3004);
+  h2->SetFillStyle(3005);
   while (*ph) {
     TString opt("hist");
-    (*ph)->SetFillStyle(3004);
-    if (ph != hs) {
-      opt.Append(" same");
-      (*ph)->SetFillStyle(3005);
-    }
+    if (ph != hs) opt.Append(" same");
 
     TH1* copy = (*ph)->DrawCopy(opt);
-    copy->GetXaxis()->SetLabelSize(0.13);
-    copy->GetYaxis()->SetLabelSize(0.08);
+    copy->GetXaxis()->SetLabelSize(2*size);
+    copy->GetYaxis()->SetLabelSize(size);
+    copy->GetYaxis()->SetTitleSize(size);
+    copy->GetYaxis()->SetTitleOffset(off);
+    copy->SetYTitle(copy->GetTitle());
+    copy->SetTitle("");
     copy->SetDirectory(0);
     ph++;
   }
+  TString s1 = h1->GetYaxis()->GetTitle();
+  TString s2 = h2->GetYaxis()->GetTitle();
+  
+  if (legend) { 
+    TLegend* l = new TLegend(0.6, 0.1, 0.9, 0.9);
+    l->SetBorderSize(0);
+    TLegendEntry* e = l->AddEntry("dummy", s1, "lf");
+    l->SetFillColor(kWhite);
+    e->SetFillColor(kBlack);
+    e->SetFillStyle(h1->GetFillStyle());
+    e = l->AddEntry("dummy", s2, "lf");
+    e->SetFillColor(kBlack);
+    e->SetFillStyle(h2->GetFillStyle());
+    l->Draw();
+  }
+  if (!ratio) return;
+  ppp = pp->cd(2);
+  ppp->SetRightMargin(0.02);
+  TH1* r = static_cast<TH1*>(h1->Clone(Form("ratio%s", h1->GetName())));
+  r->SetDirectory(0);
+  r->SetTitle("");
+  r->GetXaxis()->SetLabelSize(size);
+  r->GetYaxis()->SetLabelSize(size);
+  r->GetYaxis()->SetTitleSize(0.9*size);
+  r->GetYaxis()->SetTitleOffset(0.9*off);
+  r->SetMarkerStyle(20);
+  r->SetMarkerColor(h1->GetFillColor()+1);
+  r->SetFillStyle(3007);
+  r->SetYTitle(Form("#frac{%s}{%s}", s1.Data(), s2.Data()));
+  r->SetDirectory(0);
+
+  // r->Add(h2, -1);
+  // r->Divide(h1);
+  r->Sumw2(false);
+  h2->Sumw2(false);
+  r->Divide(h2);
+  Printf("%s", r->GetName());
+  for (UShort_t bin = 1; bin <= r->GetNbinsX(); bin++) {
+    Printf("  bin # %2d: Diff=%g+/-%g", bin, r->GetBinContent(bin),
+	   r->GetBinError(bin));
+    r->SetBinError(bin, 0);
+  }
+  r->Sumw2(false);
+  r->SetMarkerSize(4);
+  r->SetMaximum(r->GetMaximum()*1.2);
+  r->SetMinimum(r->GetMinimum()*0.8);
+  r->Draw("hist text30");  
+  p->Modified();
+  p->Update();
+  p->cd();
 }
+
 void
 Compare(const TString& mode1,
         const TString& mode2)
@@ -108,67 +173,23 @@ Compare(const TString& mode1,
   if (!GetHistos(mode1, h1, r1, i1, t1)) return;
   if (!GetHistos(mode2, h2, r2, i2, t2)) return;
 
-  TH1* hd = static_cast<TH1*>(h1->Clone("diffH"));
-  TH1* rd = static_cast<TH1*>(r1->Clone("diffReal"));
-  TH1* id = static_cast<TH1*>(i1->Clone("diffImag"));
-  TH1* td = static_cast<TH1*>(t1->Clone("diffTime"));
+  TCanvas* can = new TCanvas("comp", "Comparison", 1200, 800);
+  can->SetTopMargin(0.15);
+  can->SetBottomMargin(0.15);
+  can->SetRightMargin(0.03);
+  can->SetLeftMargin(0.03);
+  can->Divide(2, 2);
+  
+  DrawTwoInPad(can, 4, t1, t2, true, true);
+  DrawTwoInPad(can, 3, i1, i2, true, false, true);
+  DrawTwoInPad(can, 2, r1, r2, true);
+  DrawTwoInPad(can, 1, h1, h2, false);
 
-  hd->Add(h2, -1);
-  rd->Add(r2, -1);
-  id->Add(i2, -1);
-  td->Add(t2, -1);
+  can->Modified();
+  can->Update();
+  can->cd();
 
-  rd->Divide(r2);
-  id->Divide(i2);
-  td->Divide(t2);
-
-  {
-    TCanvas* can = new TCanvas("diff", "Differences");
-    can->SetTopMargin(0.15);
-    can->SetBottomMargin(0.15);
-    can->SetRightMargin(0.03);
-    can->Divide(1, 4, 0, 0);
-
-    DrawInPad(can, 4, td);
-    DrawInPad(can, 3, id);
-    DrawInPad(can, 2, rd);
-    DrawInPad(can, 1, hd);
-
-    can->cd(0);
-    TLatex* ltx = new TLatex(
-        0.5, 0.995, Form("(%s-%s)/%s", mode1.Data(), mode2.Data(), mode2.Data()));
-    ltx->SetNDC(true);
-    ltx->SetTextAlign(23);
-    ltx->SetTextSize(0.04);
-    ltx->Draw();
-
-    can->Modified();
-    can->Update();
-    can->cd();
-  }
-  {
-    TCanvas* can = new TCanvas("values", "Values");
-    can->SetTopMargin(0.15);
-    can->SetBottomMargin(0.15);
-    can->SetRightMargin(0.03);
-    can->Divide(1, 4, 0, 0);
-
-    DrawTwoInPad(can, 4, t1, t2);
-    DrawTwoInPad(can, 3, i1, i2);
-    DrawTwoInPad(can, 2, r1, r2);
-    DrawTwoInPad(can, 1, h1, h2);
-
-    can->cd(0);
-    TLatex* ltx = new TLatex(0.5, 0.995, Form("%s & %s", mode1.Data(), mode2.Data()));
-    ltx->SetNDC(true);
-    ltx->SetTextAlign(23);
-    ltx->SetTextSize(0.04);
-    ltx->Draw();
-
-    can->Modified();
-    can->Update();
-    can->cd();
-  }
+  can->Print(Form("%s_%s.png", mode1.Data(), mode2.Data()));
 }
 
 #ifdef AS_PROG

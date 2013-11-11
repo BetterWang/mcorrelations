@@ -1,7 +1,7 @@
 #ifndef CORRELATIONS_TEST_PRINTER_HH
 #define CORRELATIONS_TEST_PRINTER_HH
 /**
- * @file   correlations/test/Tester.hh
+ * @file   correlations/test/Printer.hh
  * @author Christian Holm Christensen <cholm@nbi.dk>
  * @date   Thu Oct 24 23:45:40 2013
  *
@@ -16,6 +16,9 @@ namespace correlations
 {
   namespace test
   {
+    /** 
+     * Print information on results to output
+     */
     struct Printer
     {
       /**
@@ -31,7 +34,8 @@ namespace correlations
        * @param out    Output stream
        * @param c1     Title of first column
        * @param c2     Title of second column
-       * @param timing Show timing columns too
+       * @param t1     Title of third column
+       * @param t2     Title of fourth column
        */
       static void
       title(std::ostream& out, const char* c1, const char* c2,

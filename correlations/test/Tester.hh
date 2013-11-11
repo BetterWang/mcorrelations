@@ -22,7 +22,10 @@ namespace correlations
 {
   namespace test
   {
-
+    /**
+     * A class to test the code 
+     * 
+     */
     struct Tester
     {
       /**
