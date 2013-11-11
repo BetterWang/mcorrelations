@@ -1,7 +1,7 @@
 
 
 NAME		:= correlations
-VERSION		:= 0.3
+VERSION		:= 0.9
 
 ROOT		:= root
 ROOTFLAGS	:= -l -b -q 
