@@ -18,22 +18,25 @@ namespace correlations {
   /**
    * Base class to calculate Cumulants of a given Q vector.
    *
-   * @code
-   * correlations::QVector q(maxN, maxP);
-   * correlations:recursive::Cumulant c(q);
+   @code
+   * correlations::Result  r;
+   * correlations::HarmonicVector h(n);
+   * correlations::QVector q(h);
+   * correlations::FromQVector c(q);
    *
-   * for (size event = 0; event < nEvents; event++) {
-   *   // Get the event data
+   * while (moreEvents) {
+   *   q.reset();
    *
-   *   // Fill into Q-vector
-   *   q.Reset();
-   *   for (size_t obs = 0; obs < nPhi; obs++) q.Fill(phi[obs],weight[obs])
+   *   while (moreObservations) {
+   *     correlations::Real phi    = NextObservation();
+   *     correlations::Real Weight = GetWeight(phi);
    *
-   *   // Do the QC calculations
-   *   correlations::Harmonic n[] = { 2, 1 }
-   *   correlations::Result two = c.Calculate(n);
-   *   std::cout << two.Eval() << std::endl;
+   *     q.fill(phi, weight);
+   *   }
+   *
+   *   r += c.calculate(h);
    * }
+   * std::cout << r.eval() << std::endl;
    * @endcode
    * @headerfile ""  <correlations/FromQVector.hh>
    */

@@ -22,11 +22,11 @@ namespace correlations {
    * the individual @f$Q@f$ vector components.
    *
    * @code
-   * QVector q(3,2);
+   * correlations::QVector q(3,2);
    *
    * // Fill vector
-   * q.Reset();
-   * for (Int_t i = 0; i < nPhi; i++) q.Fill(phi[i], weight[i])
+   * q.reset();
+   * for (Int_t i = 0; i < nPhi; i++) q.fill(phi[i], weight[i])
    *
    * // Show components
    * for (short n=-2, n <= 2; n++)

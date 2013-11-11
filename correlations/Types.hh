@@ -20,7 +20,7 @@
  * This code can calculate the _n_-particle correlator
  *
  * @f[
- *  QC\{N\}=
+ *  C\{N\}=
  *  \left\langle\exp\left[i\left(\sum_j^N h_j\phi_j\right)\right]\right\rangle
  * @f]
  *
@@ -39,44 +39,44 @@
  *   where @f$ M@f$ is the event multiplicity and @f$ N@f$ is the
  *   correlation order to calculate.  It is indeed rather slow.
  *
- * - correlations::Cumulant used a @f$ Q@f$-vector to calculate the
+ * - correlations::FromQVector used a @f$ Q@f$-vector to calculate the
  *   correlations.  Calculating the @f$ Q-vector@f$ is an order @f$
  *   O(N M)@f$ operation, while calculating the correlation is only
  *   @f$ O(N)@f$.  Still - it is much faster generally, then the
  *   nested loop method.
  *
  * Both algorithms are interfaced in the same way through the member
- * function correlations::Correlator::Calculate.
+ * function correlations::Correlator::calculate.
  *
- * The member function  correlations::Correlator::Calculate returns a
+ * The member function  correlations::Correlator::calculate returns a
  * correlations::Result object, which contains the sum and
  * the sum of the weights.  The sum and the sum of weights can be
  * accumulated in an object of this time, and the final event average
- * result can be extracted using correlations::Correlator::Eval.
+ * result can be extracted using correlations::Result::eval.
  *
  * @subsection recursion Recursive vs. closed-form
  *
- * The class correlations::Cumulant is again an abstract base class
+ * The class correlations::FromQVector is again an abstract base class
  * (cannot make objects of that type), and two different
  * implementations are provided.
  *
- * - correlations::recursive::Cumulant which used recursion to
+ * - correlations::recurrence::FromQVector which used recursion to
  *   simplify the expression, and has the added feature that it can
  *   calculate any order correlator - provided enough computing time
  *   and memory.
- * - correlations::closed::Cumulant which uses closed-form expression
- *   for the cumulants.  This means that we are limited to the order
+ * - correlations::closed::FromQVector which uses closed-form expression
+ *   for the correlators.  This means that we are limited to the order
  *   for which we have generated these closed forms.  Note, one can
  *   use the program print.cc to generate this, should it be needed.
  *
- * Similarly to correlations::recursive::Cumulant, there is a
+ * Similarly to correlations::recursive::FromQVector, there is a
  * sub-class of correlations::NestedLoops -
  * correlations::recursive::NestedLoops which does the nested loops
  * using recursion.
  *
  * @note The recursive algorithms could probably be implemented using
  * template recursion to let the compiler (and not run-time) deal with
- * branching, etc., which could speed up this tremendiously.
+ * branching, etc., which could speed up this tremendously.
  *
  * @section qvec Q-Vector
  *
@@ -84,17 +84,17 @@
  * @f$Q@f$-vector
  *
  * @f[
- *  Q(h,p) = \sum_i w_i^p e^{ih\phi_i}
+ *  Q(h,p) = \sum_j w_j^p e^{ih_j\phi_j}
  * @f]
 
- * where @f$ \phi_i@f$ is the angle of the observation, and @f$ w_i@f$
+ * where @f$ \phi_j@f$ is the angle of the observation, and @f$ w_j@f$
  * it's weight. Observations are added to the @f$ Q@f$-vector using
- * the member function correlations::QVector::Fill.
+ * the member function correlations::QVector::fill.
  *
  * @section impl Implementation notes.
  *
  * - All code lives in the namespace correlations. This to minimize
- *   the polution of users code space.
+ *   the pollution of users code space.
  * - the file correlations/Types.hh defines a number of basic types,
  *   like correlations::Real and correlations::Complex and the rest of
  *   the code uses these type definitions rigeroursly.  This allows
@@ -107,7 +107,7 @@
  * @section exa Examples
  *
  * - <a href="print_8cc-example.html">print.cc</a> - Print the
- *   recursive expressions for the @f$Q@f$-cumulant
+ *   recursive expressions for the @f$Q@f$-correlator
  * - <a href="analyze_8cc-example.html">analyze.ccC</a> - A program to
  *   generate and analyse the data using various techniques.
  * - <a href="_analyze_8_c-example.html">Analyze.C</a> - A ROOT based script
@@ -128,7 +128,12 @@
  * Namespace for correlations code
  */
 namespace correlations {
-  /** Type of Real */
+  /**
+   * Type of Real.
+   *
+   * Redefining to this to be long double say would make all of the code
+   * use that precsion.
+   */
   typedef double Real;
   /** Type of real array */
   typedef std::vector<Real> RealVector;
@@ -138,7 +143,26 @@ namespace correlations {
   typedef std::vector<Complex> ComplexVector;
   /** Type of harmonics */
   typedef short Harmonic;
-  /** Type definition of vector of harmonics */
+  /**
+   * Type definition of vector of harmonics
+   *
+   * @code
+   * correlations::Result  r;
+   * correlations::HarmonicVector h(n);
+   * for (size_t i = 0; i < n; i++) h[i] = ...;
+   * correlations::Correlator c = ...;n
+   *
+   * while (moreEvents) {
+   *
+   *   while (moreObservations) {
+   *     ...
+   *   }
+   *
+   *   r += c.calculate(h);
+   * }
+   * std::cout << r.eval() << std::endl;
+   * @endcode
+   */
   typedef std::vector<Harmonic> HarmonicVector;
   /** Type of Sizes */
   typedef unsigned short Size;

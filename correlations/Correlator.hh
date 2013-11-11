@@ -16,8 +16,31 @@
 namespace correlations {
   //____________________________________________________________________
   /**
-   * Base class for calculating the correlations
+   * Base class for calculating the correlations.
    *
+   * @code
+   * correlations::QVector q;
+   * correlations::RealVector phis;
+   * correlations::RealVector weights;
+   * correlations::Result  r;
+   * correlations::Correlator c = ...;
+   * correlations::HarmonicVector h(n);
+   *
+   * while (moreEvents) {
+   *
+   *   while (moreObservations) {
+   *     correlations::Real phi    = NextObservation();
+   *     correlations::Real Weight = GetWeight(phi);
+   *
+   *     phis.push_back(phi);
+   *     weights.push_back(weight);
+   *     q.fill(phi, weight);
+   *   }
+   *
+   *   r += c.calculate(h);
+   * }
+   * std::cout << r.eval() << std::endl;
+   * @endcode
    * @headerfile ""  <correlations/Correlator.hh>
    */
   struct Correlator
@@ -94,9 +117,9 @@ namespace correlations {
 
       // Now, use specific implementations
       switch (size) {
-      case 1: return c1(h);   break;
-      case 2: return c2(h);   break;
-      case 3: return c3(h); break;
+      case 1: return c1(h);  break;
+      case 2: return c2(h);  break;
+      case 3: return c3(h);  break;
       case 4: return c4(h);  break;
       case 5: return c5(h);  break;
       case 6: return c6(h);  break;
@@ -119,14 +142,19 @@ namespace correlations {
     /**
      * Calculate the @a n particle correlation using harmonics @a h.
      *
+     * @f[
+     * C\{n\} = \langle\exp[i(\sum_j^n h_j\phi_j)]\rangle
+     * @f]
+     *
      * @param n How many particles to correlate
-     * @param h Harmonic of each term
+     * @param h @f$=h_1,\ldots,h_n@f$ Harmonic of each term
      *
      * @return The correlator and the summed weights
      */
     virtual Result cN(const Size n, const HarmonicVector& h) const = 0;
     /**
      * Calculate 1-particle correlator.
+     *
      * @f[
      * C\{1\} = \langle\exp[i(\sum_j^1 h_j\phi_j)]\rangle
      * @f]
