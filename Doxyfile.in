@@ -1603,6 +1603,8 @@ INCLUDE_FILE_PATTERNS  =
 # instead of the = operator.
 
 PREDEFINED             = _POSIX_TIMERS=1 \
+		         __unix \
+			 HAVE_POSIX_TIMERS \
 		         CORRELATIONS_CLOSED_ENABLE_U7=1 \
 		       	 CORRELATIONS_CLOSED_ENABLE_U8=1
 

@@ -22,7 +22,7 @@ ifneq ($(USE7),)
 CPPFLAGS	+= -DCORRELATIONS_CLOSED_ENABLE_U7
 endif 
 LD		:= g++ 
-LDFLAGS		:= 
+LDFLAGS		:= -Wl,--no-as-needed -lrt
 HEADERS		:= correlations/Correlator.hh			\
 		   correlations/FromQVector.hh			\
 		   correlations/QVector.hh			\
@@ -134,7 +134,8 @@ write.o:	correlations/progs/write.cc 		\
 analyze:	analyze.o
 analyze.o:	correlations/progs/analyze.cc $(HEADERS) \
 		correlations/test/Tester.hh		\
-		correlations/test/Printer.hh
+		correlations/test/Printer.hh		\
+		correlations/test/Stopwatch.hh
 
 compare:	compare.o
 compare.o:	correlations/progs/compare.cc 		\

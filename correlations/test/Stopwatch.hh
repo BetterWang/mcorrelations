@@ -10,6 +10,11 @@
 #include <ctime>
 #if defined(__unix__) || defined(__unix) || defined(unix)
 # include <unistd.h>
+# if _POSIX_C_SOURCE >= 199309L
+#  ifdef _POSIX_TIMERS
+#   define HAVE_POSIX_TIMERS
+#  endif 
+# endif
 #endif
 
 namespace correlations {
@@ -153,7 +158,7 @@ namespace correlations {
       };
     }
 
-#ifdef _POSIX_TIMERS
+#ifdef HAVE_POSIX_TIMERS
     /**
      * Name space for POSIX code
      *
@@ -215,7 +220,7 @@ namespace correlations {
 #endif
     Stopwatch* Stopwatch::create()
     {
-#ifdef _POSIX_TIMERS
+#ifdef HAVE_POSIX_TIMERS
       return new POSIX::Stopwatch();
 #else
       std::cerr << "Warning, using poor ISO stopwatch" << std::endl;
