@@ -162,7 +162,7 @@ html/index.html:doc/Doxyfile $(HEADERS) $(TESTS) $(PROGS) $(DOCS)
 
 clean:
 	find . -name "*~" -or -name "*_C.*" -or -name "*_hh.*" | xargs rm -f
-	rm -f core.* TAGS *.o *.png *.vlg *.dat 
+	rm -f core.* TAGS *.o *.png *.vlg *.dat  *.root Test
 	rm -f analyze compare write print Analyze Write Compare doc/Doxyfile
 	rm -rf html $(NAME)-$(VERSION) $(NAME)-$(VERSION).tar.gz TAGS
 
@@ -179,6 +179,10 @@ distcheck:dist
 	(cd $(NAME)-$(VERSION) && $(MAKE) test doc)
 	rm -rf $(NAME)-$(VERSION)
 
+upload:distcheck doc 
+	ssh top.nbi.dk rm -rf ~/public_html/mcorrelations
+	scp -r html top.nbi.dk:~/public_html/mcorrelations
+	scp $(NAME)-$(VERSION).tar.gz top.nbi.dk:~/public_html/mcorrelations/
 #
 # EOF
 #
