@@ -2,23 +2,23 @@
  * @file   Mainpage.hh
  * @author Christian Holm Christensen <cholm@nbi.dk>
  * @date   Wed Nov 13 11:03:21 2013
- * 
+ *
  * @brief  Documentation file
  */
 /*
- * Multi-particle correlations 
+ * Multi-particle correlations
  * Copyright (C) 2013 K.Gulbrandsen, A.Bilandzic, C.H. Christensen.
- * 
+ *
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses.
  */
@@ -44,17 +44,17 @@
  *
  * @section downinst Download and Installation
  *
- * @subsection checkout Checkout from Subversion 
- * 
+ * @subsection checkout Checkout from Subversion
+ *
  * The code is managed by Subversion.  The repository can be found at
  * http://svnweb.cern.ch/world/wsvn/alicefmd/mcorrelations/
  *
- * The code can be checked out by 
+ * The code can be checked out by
  *
  * <pre class="shell">
  * svn co https://svn.cern.ch/reps/alicefmd/mcorrelations/trunk mcorrelations</pre>
  *
- * @subsection download Download 
+ * @subsection download Download
  *
  * Alternatively, the code can be downloaded from
  * http://www.nbi.dk/~cholm/mcorrelations/correlations-0.9.tar.gz
@@ -63,42 +63,42 @@
  *
  * All code of the project is contained in declaration (header) files.
  * That is, all code is 'inline'.  That means that there is no need to
- * compile a library or the like first.  
+ * compile a library or the like first.
  *
- * To use the code in some other project located at say 
+ * To use the code in some other project located at say
  * @c /some/directory do
  *
  * <pre class="shell">make install PREFIX=/some/directory</pre>
- * 
+ *
  * and then make sure that @c /some/directory is in the include path
  * of the compiler (e.g., <tt>-I/some/directory</tt>)
- * 
+ *
  * @note When using the code with <a href="root.cern.ch">ROOT</a> it
  * is important that the code is (at least) <a
  * href="http://root.cern.ch/drupal/content/compiling-your-code-also-known-aclic">ACLiC</a>
  * compiled.  Suppose we have the ROOT script <tt>Test.C</tt> @include
  * Test.C and the code of this package is in <tt>/some/directory</tt>,
- * then we need to do 
+ * then we need to do
  * <pre class="shell">
- * Root> gSystem->AddIncludePath("-I/some/directory"); 
+ * Root> gSystem->AddIncludePath("-I/some/directory");
  * Root> .L Test.C+
  * Root> Test() </pre>
  *
  * @subsection tests Examples and Tests
  *
- * The package comes with a number of examples and tests 
+ * The package comes with a number of examples and tests
  *
- * The test code lives in the namespace correlations::test: 
+ * The test code lives in the namespace correlations::test:
  *
- * - correlations::test::Random generates random numbers 
+ * - correlations::test::Random generates random numbers
  * - correlations::test::Distribution allows one to sample a
  *   @f$\phi@f$ distribution.
- * - correlations::test::Weights generates weights 
- * - correlations::test::WriteData writes a data file 
- * - correlations::test::ReadData reads in a data file 
+ * - correlations::test::Weights generates weights
+ * - correlations::test::WriteData writes a data file
+ * - correlations::test::ReadData reads in a data file
  * - correlations::test::Stopwatch times execution of code blocks
  * - correlations::test::Tester tests the correlation code using an
- *   existing data file 
+ *   existing data file
  * - correlations::test::Printer prints results to a stream (a file or
  *   the screen).
  * - correlations::test::Comparer compares the results of two runs of
@@ -107,13 +107,13 @@
  * There are some predefined examples that uses these classes.  The
  * code is in the sub-directory correlations/prog:
  *
- * - <a href="write_8cc-example.html">write.cc</a> generates a data file 
+ * - <a href="write_8cc-example.html">write.cc</a> generates a data file
  * - <a href="analyze_8cc-example.html">analyze.cc</a> analyses the
  *   data file generated for correlations
  * - <a href="compare_8cc-example.html">compare.cc</a> compares the
  *   results of two different runs of analyze.cc
- * 
- * To build and run the tests, do 
+ *
+ * To build and run the tests, do
  *
  * <pre class="shell">
  * make test
@@ -125,46 +125,46 @@
  * <pre class="shell">
  * make test USE7=1 USE=8
  * </pre>
- * Do note, that compilation will take a very long time in this case. 
+ * Do note, that compilation will take a very long time in this case.
  *
  * All of these programs allow for a set of options.  To see which
  * options are accepted, do
  * <pre class="shell">
  * ./prog -h
  * </pre>
- * where <tt>prog</tt> is one of <tt>write</tt>, <tt>analyze</tt>, or 
+ * where <tt>prog</tt> is one of <tt>write</tt>, <tt>analyze</tt>, or
  * <tt>compare</tt>.
  *
  * In addition, there are 3 ROOT-based scripts/programs to illustrate
  * the use of the code in ROOT.  These are parallel to the 3 above,
  * and are:
  *
- * - <a href="_write_8_c-example.html">Write.C</a> generates a data file 
+ * - <a href="_write_8_c-example.html">Write.C</a> generates a data file
 
  * - <a href="_analyze_8_c-example.html">Analyze.C</a> analyses the
  *   data file generated for correlations
  * - <a href="_compare_8_c-example.html">Compare.C</a> compares the
  *   results of two different runs of analyze.cc
- * 
- * To build and run these examples do 
+ *
+ * To build and run these examples do
  * <pre class="shell">
  * make Test
  * </pre>
- * 
+ *
  * @note By default, only up to 6-particle correlators are defined for
  * the so-called 'fixed-form' (see @ref algo), but 7 and 8-particle
  * correlators can be enabled by doing
  * <pre class="shell">
  * make Test USE7=1 USE=8
  * </pre>
- * Do note, that compilation will take a very long time in this case. 
+ * Do note, that compilation will take a very long time in this case.
  *
  * The scripts can also be executed in the interpretive environment -
  * but should always be <a
  * href="http://root.cern.ch/drupal/content/compiling-your-code-also-known-aclic">ACLiC</a>:
  *
  * <pre class="shell">
- * Root> gSystem->AddIncludePath("-I."); 
+ * Root> gSystem->AddIncludePath("-I.");
  * Root> .x correlations/test/Write.C+(nEvents,minN,maxN)
  * Root> .x correlations/test/Analyze.C+("CLOSED",maxH,doNestedLoops)
  * Root> .x correlations/test/Analyze.C+("RECURRENCE",maxH,doNestedLoops)
@@ -230,7 +230,7 @@
  * @f$Q@f$-vector
  *
  * @f[
- *  Q(h,p) = \sum_j w_j^p e^{ih_j\phi_j}
+ *  Q(h,p) = \sum_j w_j^p e^{ih\phi_j}
  * @f]
 
  * where @f$ \phi_j@f$ is the angle of the observation, and @f$ w_j@f$
@@ -250,12 +250,12 @@
  * - The methods are implemented in plain C++.
  * - Testing code is available in correlations::test
  *
- * @section liclink Authors, Copyright, and License 
+ * @section liclink Authors, Copyright, and License
  *
  * Copyright &copy; 2013 Kristjan Gulbrandsen, Ante Bilandzic,
- * Christian Holm Christensen. 
+ * Christian Holm Christensen.
  *
- * The code was developed by 
+ * The code was developed by
  *
  * - Kristjan Gulbrandsen <a href="mailto:gulbrand@nbi.dk">gulbrand AT
  *   nbi DOT dk</a>
@@ -278,13 +278,13 @@
  * @example compare.cc A simple program to compare the results of
  * running analyze.cc twice. Uses correlations::test::Comparer
  *
- * @example Write.C A ROOT-based script to generate a data file 
+ * @example Write.C A ROOT-based script to generate a data file
  *
  * @example Analyze.C A ROOT-based script to illustrate the use of
  * the code in ROOT
  *
  * @example Compare.C A ROOT-based script to compare the results of
- * running Analyze.C twice. 
+ * running Analyze.C twice.
  *
  * @example print.cc A simple program that dumps the expressions for
  * the correlations using @f$ Q@f$-vector input and recursion.
