@@ -43,10 +43,10 @@
 					</folderInfo>
 					<fileInfo id="cdt.managedbuild.toolchain.gnu.base.476436774.724933426" name="Compare.C" rcbsApplicability="disable" resourcePath="correlations/progs/Compare.C" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.base.368376961.200210666">
 						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.368376961.200210666" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base.368376961">
-							<option id="gnu.cpp.compiler.option.include.paths.279957076" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+							<option id="gnu.cpp.compiler.option.include.paths.279957076" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 								<listOptionValue builtIn="false" value="&quot;${ROOTSYS}/include&quot;"/>
 							</option>
-							<option id="gnu.cpp.compiler.option.preprocessor.def.1437311108" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+							<option id="gnu.cpp.compiler.option.preprocessor.def.1437311108" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 								<listOptionValue builtIn="false" value="AS_PROG=1"/>
 							</option>
 							<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1081957454" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -144,12 +144,16 @@
 							<option id="gnu.cpp.compiler.option.include.paths.969396183" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 								<listOptionValue builtIn="false" value="&quot;${ROOTSYS}/include&quot;"/>
 							</option>
-							<option id="gnu.cpp.compiler.option.preprocessor.def.2087429762" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+							<option id="gnu.cpp.compiler.option.preprocessor.def.2087429762" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 								<listOptionValue builtIn="false" value="AS_PROG=1"/>
 							</option>
 							<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.470430128" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 						</tool>
 					</fileInfo>
+					<fileInfo id="cdt.managedbuild.toolchain.gnu.base.476436774.2811346.6627048" name="jquery.js" rcbsApplicability="disable" resourcePath="html/jquery.js" toolsToInvoke=""/>
+					<sourceEntries>
+						<entry excluding="html/jquery.js" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>

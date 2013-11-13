@@ -49,11 +49,14 @@ PROGS		:= correlations/progs/analyze.cc 		\
 		   correlations/progs/Write.C			\
 		   correlations/progs/Analyze.C			\
 		   correlations/progs/Compare.C			
+DOCS		:= doc/Mainpage.hh				\
+		   doc/License.hh				\
+		   doc/Test.C					
 EXEC		:= $(notdir $(basename $(PROGS)))
 EXEC_ARGS	:= -L
 EXTRA		:= Makefile 				\
-		   Doxyfile.in 				\
-		   style.css				\
+		   doc/Doxyfile.in 			\
+		   doc/style.css			\
 		   data/ante.mc
 
 %.o:correlations/progs/%.cc
@@ -71,6 +74,13 @@ EXTRA		:= Makefile 				\
 	valgrind --tool=callgrind --callgrind-out-file=$@ ./$<
 
 all:	$(EXEC)
+
+install: 
+ifeq ($(PREFIX),)
+	$(error PREFIX is not defined)
+endif
+	$(foreach f, $(HEADERS), \
+	  mkdir -p $(PREFIX)/$(dir $(f)); cp $(f) $(PREFIX)/$(f);)
 
 data.dat:write
 	@echo "=== Generating data file ======================="
@@ -143,21 +153,22 @@ compare.o:	correlations/progs/compare.cc 		\
 		correlations/test/Printer.hh		
 print:		print.o
 
-Doxyfile:Doxyfile.in 
+doc/Doxyfile:	doc/Doxyfile.in 
 	sed -e 's/@PACKAGE@/${PACKAGE}/' -e 's/@VERSION@/${VERSION}/' < $< > $@
 
-doc:	Doxyfile $(HEADERS) $(TESTS) $(PROGS)
-	doxygen Doxyfile
+doc:	html/index.html
+html/index.html:doc/Doxyfile $(HEADERS) $(TESTS) $(PROGS) $(DOCS)
+	doxygen doc/Doxyfile
 
 clean:
 	find . -name "*~" -or -name "*_C.*" -or -name "*_hh.*" | xargs rm -f
 	rm -f core.* TAGS *.o *.png *.vlg *.dat 
-	rm -f analyze compare write print Test Test.png Doxyfile
+	rm -f analyze compare write print Analyze Write Compare doc/Doxyfile
 	rm -rf html $(NAME)-$(VERSION) $(NAME)-$(VERSION).tar.gz TAGS
 
 dist:
 	mkdir -p $(NAME)-$(VERSION)
-	$(foreach f, $(HEADERS) $(TESTS) $(EXTRA) $(PROGS), \
+	$(foreach f, $(HEADERS) $(TESTS) $(EXTRA) $(PROGS) $(DOCS), \
 	  mkdir -p $(NAME)-$(VERSION)/$(dir $(f)); \
 	  cp $(f) $(NAME)-$(VERSION)/$(f);)
 	tar -czvf $(NAME)-$(VERSION).tar.gz $(NAME)-$(VERSION)

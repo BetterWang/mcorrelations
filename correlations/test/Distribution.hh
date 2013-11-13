@@ -18,21 +18,22 @@ namespace correlations {
   namespace test {
     //====================================================================
     /**
-     * The phi distribution
+     * The @f$\phi@f$ distribution.
      *
      * @f[
-     *  f(\phi) = 1 + 2\sum_{i=1}^{6} \cos(i(\phi-\Phi_R))
+     *  f(\phi) = 1 + 2\sum_{i=1}^{6} p_i\cos(i(\phi-\Phi_R))
      * @f]
      *
      * The indefinite integral is given by
      * @f[
-     * \int d\phi f(\phi) = 2\pi + 2 \sum_{i=1}^{6} \frac{\sin(i(\phi-\Phi_R))}{i}
+     * \int d\phi f(\phi) = 2\pi + 
+     *    2 \sum_{i=1}^{6} p_i \frac{\sin(i(\phi-\Phi_R))}{i}
      * @f]
      *
      * or for the definte integral over @f$[a,b]@f$
      * @f[
      * \int_a^b f(\phi) = (b-a) + 2 \sum_{i=1}^6
-     *   \frac{\sin(i(b-\Phi_R))-\sin(i(a-\Phi_R))}{i}
+     *   p_i \frac{\sin(i(b-\Phi_R))-\sin(i(a-\Phi_R))}{i}
      * @f]
      *
      * @headerfile "" <correlations/test/Distribution.hh>

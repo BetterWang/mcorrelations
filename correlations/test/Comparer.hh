@@ -15,7 +15,12 @@
 namespace correlations {
   namespace test {
     /** 
-     * Compare results stored in two streams
+     * Compare results from two streams. 
+     *
+     * The results are assumed to come from
+     * correlations::test::Tester.  This class will then show the
+     * difference between the results as well as the difference in
+     * timing.
      */
     struct Comparer
     {
@@ -143,3 +148,6 @@ namespace correlations {
 }
 
 #endif /* COMPARE_HH_ */
+//
+// EOF
+//

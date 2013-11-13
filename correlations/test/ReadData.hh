@@ -18,7 +18,7 @@
 namespace correlations {
   namespace test {
     /**
-     * A Read data from file
+     * A Read data from file.
      *
      * @code
      * std::ifstream in("data.dat");

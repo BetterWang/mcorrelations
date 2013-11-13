@@ -3,7 +3,13 @@
  * @author Christian Holm Christensen <cholm@nbi.dk>
  * @date   Thu Oct 24 23:45:40 2013
  *
- * @brief  An example
+ * @brief  An example of writing a data file.  
+ * 
+ * The program takes a number of options.  Do 
+ * <pre class="shell">
+ * ./write -h
+ * </pre>
+ * for information. 
  *
  * Copyright (c) 2013 Christian Holm Christensen
  */

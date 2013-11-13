@@ -17,7 +17,7 @@ namespace correlations
   namespace test
   {
     /** 
-     * Print information on results to output
+     * Print information on results to output.
      */
     struct Printer
     {

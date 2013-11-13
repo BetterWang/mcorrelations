@@ -16,7 +16,7 @@
 namespace correlations {
   namespace test {
     /**
-     * Random number generator
+     * Random number generator.
      *
      * @headerfile "" <correlations/test/Random.hh>
      */

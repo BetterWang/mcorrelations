@@ -116,3 +116,16 @@ div.ah {
     background-image: none;
 }
 
+pre.shell {
+    background-color: #ddd;
+    color: black;
+    border: thin solid black;
+    margin-left: 2em;
+    margin-right: 2em;
+    padding: 5px;
+}
+
+h1 { 
+    margin-top: 24px;
+    border-bottom: medium solid gray
+}

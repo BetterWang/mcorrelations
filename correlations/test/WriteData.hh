@@ -22,12 +22,14 @@ namespace correlations {
    */
   namespace test {
     /**
-     * Example generator
+     * Example generator. 
      *
-     * @code
-     * std::ofstream out("data.dat");
+     * This generator uses correlations::test::Distribution and
+     * correlations::test::Weights. 
+     * 
+     * @code 
+     * std::ofstream out("data.dat"); 
      * correlations::test::WriteData w(20,30);
-     *
      * w.Run(out, nEvents);
      * @endcode
      *
@@ -123,7 +125,8 @@ namespace correlations {
       {
 	std::ofstream out(outfile.c_str());
 	if (!out) {
-	  std::cerr << "Failed to make the output file: " << outfile << std::endl;
+	  std::cerr << "Failed to make the output file: " << outfile 
+		    << std::endl;
 	  return;
 	}
 	run(out, nEvents, verb, prec);

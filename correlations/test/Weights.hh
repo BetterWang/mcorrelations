@@ -15,7 +15,11 @@
 namespace correlations {
   namespace test {
     /**
-     * A structure that hold test weights
+     * A structure that hold test weights. 
+     *
+     * The weights are random numbers between @f$ 1 \pm 0.144@@f$ and
+     * depend on @f$ \phi@f$.  There are a total of 72 bins between
+     * @f$ 0@f$ and @f$ 2\pi@f$.
      *
      * @headerfile "" <correlations/test/Weights.hh>
      */
