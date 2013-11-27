@@ -8,19 +8,19 @@
  * @brief  Cumulant using closed-form expressions
  */
 /*
- * Multi-particle correlations 
+ * Multi-particle correlations
  * Copyright (C) 2013 K.Gulbrandsen, A.Bilandzic, C.H. Christensen.
- * 
+ *
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses.
  */
@@ -56,9 +56,9 @@ namespace correlations {
        */
       FromQVector(QVector& q) : correlations::FromQVector(q)
       {
-#ifdef CORRELATIONS_CLOSED_ENABLE_QC8
+#ifdef CORRELATIONS_CLOSED_ENABLE_U8
 	_maxFixed = 8;
-#elif  CORRELATIONS_CLOSED_ENABLE_QC7
+#elif  CORRELATIONS_CLOSED_ENABLE_U7
 	_maxFixed = 7;
 #else
 	_maxFixed = 6;
@@ -87,14 +87,14 @@ namespace correlations {
 	case 5: return uc5(h[0], h[1], h[2], h[3], h[4]);
 	case 6: return uc6(h[0], h[1], h[2], h[3], h[4], h[5]);
 	case 7:
-#ifdef CORRELATIONS_CLOSED_ENABLE_QC7
+#ifdef CORRELATIONS_CLOSED_ENABLE_U7
 	  return uc7(h[0], h[1], h[2], h[3], h[4], h[5], h[6]);
 #else
 	  std::cerr << "closed-form C7 disabled at compile-time" << std::endl;
 	  break;
 #endif
 	case 8:
-#ifdef CORRELATIONS_CLOSED_ENABLE_QC8
+#ifdef CORRELATIONS_CLOSED_ENABLE_U8
 	  return uc8(h[0], h[1], h[2], h[3], h[4], h[5], h[6], h[7]);
 #else
 	  std::cerr << "closed-form C8 disabled at compile-time" << std::endl;

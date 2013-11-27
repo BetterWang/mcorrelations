@@ -20,19 +20,19 @@
  * @endverbatim
  */
 /*
- * Multi-particle correlations 
+ * Multi-particle correlations
  * Copyright (C) 2013 K.Gulbrandsen, A.Bilandzic, C.H. Christensen.
- * 
+ *
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses.
  */
@@ -464,6 +464,7 @@ void usage(const char* prog)
 	    << "Options:\n"
 	    << "  -n  NUMBER   Largest correlator to print\n"
 	    << "  -t  TYPE     How to print\n\n"
+	    << "  -d           Show differential equations"
 	    << "TYPE can be one of\n\n"
 	    << "  maxima    Input to Maxima CAS\n"
 	    << "  c++       C++ functions\n"
@@ -477,6 +478,7 @@ main(int argc, char** argv)
 {
   Size         n = 4;
   std::string  t = "maxima";
+  bool         d = false;
 
   for (int i = 1; i < argc; i++) {
     if (argv[i][0] != '-') {
@@ -488,6 +490,7 @@ main(int argc, char** argv)
     case 'h': usage(argv[0]); return 0;
     case 'n': n = atoi(argv[++i]); break;
     case 't': t = argv[++i]; break;
+    case 'd': d = true; break;
     default:
       std::cerr << argv[0] << ": Unknown option " << argv[i] << std::endl;
       return 1;

@@ -51,12 +51,13 @@ PROGS		:= correlations/progs/analyze.cc 		\
 		   correlations/progs/Compare.C			
 DOCS		:= doc/Mainpage.hh				\
 		   doc/License.hh				\
-		   doc/Test.C					
+		   doc/Test.C					\
+		   doc/style.css				\
+		   doc/layout.xml				
 EXEC		:= $(notdir $(basename $(PROGS)))
 EXEC_ARGS	:= -L
 EXTRA		:= Makefile 				\
 		   doc/Doxyfile.in 			\
-		   doc/style.css			\
 		   data/ante.mc
 
 %.o:correlations/progs/%.cc
@@ -179,10 +180,13 @@ distcheck:dist
 	(cd $(NAME)-$(VERSION) && $(MAKE) test doc)
 	rm -rf $(NAME)-$(VERSION)
 
-upload:distcheck doc 
-	ssh top.nbi.dk rm -rf ~/public_html/mcorrelations
-	scp -r html top.nbi.dk:~/public_html/mcorrelations
-	scp $(NAME)-$(VERSION).tar.gz top.nbi.dk:~/public_html/mcorrelations/
+upload:distcheck doc
+	ssh top.nbi.dk rm -rf ~/public_html/m$(NAME)
+	mv html m$(NAME)
+	tar czf - m$(NAME) | ssh top.nbi.dk "tar xzf - -C ~/public_html/"
+	scp $(NAME)-$(VERSION).tar.gz top.nbi.dk:~/public_html/m$(NAME)/
+	mv m$(NAME) html
+
 #
 # EOF
 #
