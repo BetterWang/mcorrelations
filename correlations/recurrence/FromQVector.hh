@@ -303,10 +303,12 @@ namespace correlations {
 #ifndef _REENTRANT
         static SizeVector v;
         v.resize(std::max(n, Size(v.size())));
+	static HarmonicVector hh;
+	hh.resize(std::max(n*n,hh.size()));
 #else
         SizeVector v(n-1); // Allocate cache here
 #endif
-        return ucN2(n, h, v);
+        return ucN2(n, 0, h, v);
       }
       /**
        * Calculate the multi-particle correlation
@@ -333,8 +335,9 @@ namespace correlations {
        * @return @f$ QC{n}@f$
        */
       Complex ucN2(const Size n,
-                  const HarmonicVector& h,
-                  SizeVector v) const
+		   const Size l,
+		   const HarmonicVector& h,
+		   SizeVector v) const // - hmm, pass copy 
       {
         if (n == 0) return Complex(1,0);
         if (n == 1) return uc1(h[0]);
@@ -342,28 +345,11 @@ namespace correlations {
         // Make vector of harmonics - expensive allocation
         HarmonicVector hh(n);
         hh[n-1] =  h[n-1];
+	// h[(l+1)*n-1] = h[l*n-1]; 
 
         // Make vector of indices
         // SizeVector v(n-1);
-        // for (size_t i = 0; i < v.size(); i++) v[i] = i;
-
-        Complex r; // = x;
-        Real    f = 1;
-        Real    s = 1;
-        Power   p = 1;
-        for (Size m = n; m > 0; m--) {
-          // Reset indices for combinations
-          for (size_t i = 0; i < size_t(n-1); i++) v[i] = i;
-          Size k  =  m-1;
-          do {
-            for (size_t i = 0; i < size_t(n-1); i++) hh[i] = h[v[i]];
-            // Harmonic second = 0;
-            // for (size_t i = k; i < n-1; i++) second += h[v[i]];
-
-            Complex t = ucN2(k, hh, v);
-
-            // The calculation
-            Harmonic a = std::accumulate(hh.begin()+k, hh.begin()+n,0);
+            Complex  t = ucN2(k, l+1, hh, v);
             Complex  x = s * f * t * _q(a, p);
             r += x;
           } while (nextCombination(v.begin(), v.begin()+k, v.begin()+n-1));
