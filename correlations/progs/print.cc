@@ -478,7 +478,7 @@ main(int argc, char** argv)
 {
   Size         n = 4;
   std::string  t = "maxima";
-  bool         d = false;
+  // bool         d = false;
 
   for (int i = 1; i < argc; i++) {
     if (argv[i][0] != '-') {
@@ -490,7 +490,7 @@ main(int argc, char** argv)
     case 'h': usage(argv[0]); return 0;
     case 'n': n = atoi(argv[++i]); break;
     case 't': t = argv[++i]; break;
-    case 'd': d = true; break;
+    // case 'd': d = true; break;
     default:
       std::cerr << argv[0] << ": Unknown option " << argv[i] << std::endl;
       return 1;
