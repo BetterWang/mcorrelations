@@ -49,7 +49,7 @@
  * The code is managed by Subversion.  The repository can be found at
  * http://svnweb.cern.ch/world/wsvn/alicefmd/mcorrelations/
  *
- * The code can be checked out by
+ * The code can be checked out by (may require CERN credentials)
  *
  * <pre class="shell">
  * svn co https://svn.cern.ch/reps/alicefmd/mcorrelations/trunk mcorrelations</pre>
@@ -71,7 +71,15 @@
  * <pre class="shell">make install PREFIX=/some/directory</pre>
  *
  * and then make sure that @c /some/directory is in the include path
- * of the compiler (e.g., <tt>-I/some/directory</tt>)
+ * of the compiler (e.g., <tt>-I/some/directory</tt>).  One can also
+ * copy the sub-directory <tt>correlations</tt> to the project in question
+ * and use it directly from there (please observe the license conditions).
+ *
+ * @note Concerning compatibility.  The code it self is portable as it is,
+ * and only uses ISO C++98/C99.  However, the code and in particular the
+ * build system captured in the top-level Makefile have only been tested on
+ * GNU/Linux with relatively new versions of GCC.  To build the tests on other
+ * platforms it may require a bit of tweaking on the users behalf.
  *
  * @note When using the code with <a href="root.cern.ch">ROOT</a> it
  * is important that the code is (at least) <a
@@ -150,6 +158,7 @@
  * <pre class="shell">
  * make Test
  * </pre>
+ * (notice the change of case)
  *
  * @note By default, only up to 6-particle correlators are defined for
  * the so-called 'fixed-form' (see @ref algo), but 7 and 8-particle
