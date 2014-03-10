@@ -73,7 +73,7 @@ void DrawInPad(TVirtualPad* p,
 void
 Analyze(const TString& mode="CLOSED",
         UShort_t       maxH=6,
-        Bool_t         doLoops=false)
+        Bool_t         /*doLoops*/=false)
 {
 #ifdef __CINT__
   gROOT->LoadMacro("correlations/Types.hh++");
@@ -158,8 +158,6 @@ Analyze(const TString& mode="CLOSED",
   // --- The results -------------------------------------------------
   const UShort_t             nQ = maxH - 1;
   correlations::ResultVector qs(nQ);
-  // correlations::RealVector   phis;
-  // correlations::RealVector   weights;
 
   // --- Event loop --------------------------------------------------
   UShort_t nEvents = tree->GetEntries();
@@ -215,7 +213,6 @@ Analyze(const TString& mode="CLOSED",
   can->Modified();
   can->Update();
   can->cd();
-  // can->Print(recursive ? "recursive.png" : "closed.png");
 
   TString out(mode);
   out.ToLower();

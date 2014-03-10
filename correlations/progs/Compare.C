@@ -154,8 +154,8 @@ void DrawTwoInPad(TVirtualPad* p,
 
   // r->Add(h2, -1);
   // r->Divide(h1);
-  r->Sumw2(false);
-  h2->Sumw2(false);
+  r->GetSumw2()->Set(0); // r->Sumw2(false);
+  h2->GetSumw2()->Set(0); // h2->Sumw2(false);
   r->Divide(h2);
   Printf("%s", r->GetName());
   for (UShort_t bin = 1; bin <= r->GetNbinsX(); bin++) {
@@ -163,7 +163,7 @@ void DrawTwoInPad(TVirtualPad* p,
 	   r->GetBinError(bin));
     r->SetBinError(bin, 0);
   }
-  r->Sumw2(false);
+  r->GetSumw2()->Set(0); //r->Sumw2(false);
   r->SetMarkerSize(4);
   r->SetMaximum(r->GetMaximum()*1.2);
   r->SetMinimum(r->GetMinimum()*0.8);

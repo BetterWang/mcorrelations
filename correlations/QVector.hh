@@ -95,7 +95,8 @@ namespace correlations {
       _maxP = h.size();
       _maxN = 0;
       for (HarmonicVector::const_iterator i = h.begin(); i != h.end(); ++i)
-	_maxN += std::abs(*i);
+	// Older GCC does not have overload for integer types
+	_maxN += short(std::abs(float(*i)));
       resize(_maxN, _maxP);
     }
     /**

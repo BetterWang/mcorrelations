@@ -28,6 +28,7 @@
 #include <correlations/Types.hh>
 #include <cmath>
 #include <vector>
+#include <algorithm>
 
 namespace correlations {
   namespace test {
