@@ -62,8 +62,7 @@ namespace correlations {
      *
      */
     QVector(Size mN, Size mP, bool useWeights)
-      : _maxN(mN), _maxP(mP), _useWeights(useWeights),
-	_q(0)
+      : _maxN(mN), _maxP(mP), _useWeights(useWeights), _q(0)
     {
       resize(mN, mP);
     }
@@ -74,7 +73,7 @@ namespace correlations {
      * @param useWeights Whether to use weights
      */
     QVector(const HarmonicVector& h, bool useWeights) 
-      : _maxN(0), _maxP(0), _useWeights(useWeights)
+      : _maxN(0), _maxP(0), _useWeights(useWeights), _q(0)
     {
       resize(h);
     }

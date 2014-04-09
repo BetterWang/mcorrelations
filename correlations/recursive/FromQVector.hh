@@ -102,7 +102,7 @@ namespace correlations {
         static SizeVector cnt(0);
         static HarmonicVector hh(0);
         cnt.resize(std::max(Size(cnt.size()), n));
-	hh.resize(std::max(Size(hh.size()), h.size()));
+	hh.resize(std::max(hh.size(), h.size()));
         hh.insert(hh.begin(), h.begin(), h.end());
 #else
         SizeVector cnt(n);
