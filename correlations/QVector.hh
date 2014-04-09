@@ -36,18 +36,18 @@ namespace correlations {
    * It provides member functions for reseting, filling and accessing
    * the individual @f$Q@f$ vector components.
    *
-   * @code
-   * correlations::QVector q(3,2);
-   *
-   * // Fill vector
-   * q.reset();
-   * for (Int_t i = 0; i < nPhi; i++) q.fill(phi[i], weight[i])
-   *
-   * // Show components
-   * for (short n=-2, n <= 2; n++)
-   *   for (unsigned short p = 0; p < 2; p++)
-   *     std::cout << "Q{" << n << "," << p << "}=" << q(n,p) << std::endl;
-   * @endcode
+   @code
+   correlations::QVector q(3,2);
+   
+   // Fill vector
+   q.reset();
+   for (Int_t i = 0; i < nPhi; i++) q.fill(phi[i], weight[i])
+   
+   // Show components
+   for (short n=-2, n <= 2; n++)
+     for (unsigned short p = 0; p < 2; p++)
+       std::cout << "Q{" << n << "," << p << "}=" << q(n,p) << std::endl;
+   @endcode
    * @headerfile ""  <correlations/QVector.hh>
    */
   struct QVector
@@ -61,11 +61,22 @@ namespace correlations {
      * @param useWeights Whether to use weights or not
      *
      */
-    QVector(Size maxN, Size maxP, bool useWeights)
-      : _maxN(maxN), _maxP(maxP), _useWeights(useWeights),
+    QVector(Size mN, Size mP, bool useWeights)
+      : _maxN(mN), _maxP(mP), _useWeights(useWeights),
 	_q(0)
     {
-      resize(maxN, maxP);
+      resize(mN, mP);
+    }
+    /** 
+     * Constructor 
+     * 
+     * @param h Harmonics vector
+     * @param useWeights Whether to use weights
+     */
+    QVector(const HarmonicVector& h, bool useWeights) 
+      : _maxN(0), _maxP(0), _useWeights(useWeights)
+    {
+      resize(h);
     }
     /**
      * Resize the QVector - note this clears all content
@@ -73,10 +84,10 @@ namespace correlations {
      * @param maxN New maximum harmonic
      * @param maxP New maximum power
      */
-    void resize(Size maxN, Size maxP)
+    void resize(Size mN, Size mP)
     {
-      _maxN = maxN;
-      _maxP = maxP;
+      _maxN = mN;
+      _maxP = mP;
       // We store both the positive and the negative harmonics for
       // efficiency reasons. So we need to index from -fMaxN-1 to fMaxN,
       // which gives us a total of 2*fMaxN+1 places for N.

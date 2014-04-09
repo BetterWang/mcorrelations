@@ -99,9 +99,10 @@ namespace correlations {
       Complex ucN(const Size n, const HarmonicVector& h) const
       {
 #ifndef _REENTRANT
-        static SizeVector cnt(n);
-        static HarmonicVector hh(h.size());
+        static SizeVector cnt(0);
+        static HarmonicVector hh(0);
         cnt.resize(std::max(Size(cnt.size()), n));
+	hh.resize(std::max(Size(hh.size()), h.size()));
         hh.insert(hh.begin(), h.begin(), h.end());
 #else
         SizeVector cnt(n);

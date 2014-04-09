@@ -34,25 +34,25 @@ namespace correlations {
    * Base class to calculate Cumulants of a given Q vector.
    *
    @code
-   * correlations::Result  r;
-   * correlations::HarmonicVector h(n);
-   * correlations::QVector q(h);
-   * correlations::FromQVector c(q);
-   *
-   * while (moreEvents) {
-   *   q.reset();
-   *
-   *   while (moreObservations) {
-   *     correlations::Real phi    = NextObservation();
-   *     correlations::Real Weight = GetWeight(phi);
-   *
-   *     q.fill(phi, weight);
-   *   }
-   *
-   *   r += c.calculate(h);
-   * }
-   * std::cout << r.eval() << std::endl;
-   * @endcode
+   correlations::Result  r;
+   correlations::HarmonicVector h(n);
+   correlations::QVector q(h);
+   correlations::FromQVector c(q);
+   
+   while (moreEvents) {
+     q.reset();
+   
+     while (moreObservations) {
+       correlations::Real phi    = NextObservation();
+       correlations::Real Weight = GetWeight(phi);
+   
+       q.fill(phi, weight);
+     }
+   
+     r += c.calculate(h);
+   }
+   std::cout << r.eval() << std::endl;
+   @endcode
    * @headerfile ""  <correlations/FromQVector.hh>
    */
   struct FromQVector : public Correlator
@@ -79,7 +79,8 @@ namespace correlations {
      */
     virtual Result cN(const Size n, const HarmonicVector& h) const
     {
-      static HarmonicVector null(_q.maxN());
+      static HarmonicVector null(0);
+      if (null.size() <= 0) null.resize(_q.maxN());
       static bool filled = false;
       if (!filled) {
         std::fill(null.begin(), null.end(), 0);

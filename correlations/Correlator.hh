@@ -33,29 +33,29 @@ namespace correlations {
   /**
    * Base class for calculating the correlations.
    *
-   * @code
-   * correlations::QVector q;
-   * correlations::RealVector phis;
-   * correlations::RealVector weights;
-   * correlations::Result  r;
-   * correlations::Correlator c = ...;
-   * correlations::HarmonicVector h(n);
-   *
-   * while (moreEvents) {
-   *
-   *   while (moreObservations) {
-   *     correlations::Real phi    = NextObservation();
-   *     correlations::Real Weight = GetWeight(phi);
-   *
-   *     phis.push_back(phi);
-   *     weights.push_back(weight);
-   *     q.fill(phi, weight);
-   *   }
-   *
-   *   r += c.calculate(h);
-   * }
-   * std::cout << r.eval() << std::endl;
-   * @endcode
+   @code
+   correlations::QVector q;
+   correlations::RealVector phis;
+   correlations::RealVector weights;
+   correlations::Result  r;
+   correlations::Correlator c = ...;
+   correlations::HarmonicVector h(n);
+   
+   while (moreEvents) {
+   
+     while (moreObservations) {
+       correlations::Real phi    = NextObservation();
+       correlations::Real Weight = GetWeight(phi);
+   
+       phis.push_back(phi);
+       weights.push_back(weight);
+       q.fill(phi, weight);
+     }
+   
+     r += c.calculate(h);
+   }
+   std::cout << r.eval() << std::endl;
+   @endcode
    * @headerfile ""  <correlations/Correlator.hh>
    */
   struct Correlator

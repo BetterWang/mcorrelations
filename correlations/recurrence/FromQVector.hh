@@ -100,11 +100,11 @@ namespace correlations {
                   const Harmonic n2,
                   const Harmonic n3) const
       {
-        const Real c2 = 2;
+        const Real k2 = 2;
         return (uc2(n1,n2) * _q(n3,1)
                 - _q(n2,1) * _q(n1+n3,2)
                 - _q(n1,1) * _q(n2+n3,2)
-                + c2 * _q(n1+n2+n3,3));
+                + k2 * _q(n1+n2+n3,3));
       }
       /**
        * Do the 4-particle calculation
@@ -131,16 +131,16 @@ namespace correlations {
                   const Harmonic n3,
                   const Harmonic n4) const
       {
-        const Real c2 = 2;
-        const Real c6 = 6;
+        const Real k2 = 2;
+        const Real k6 = 6;
         return (uc3(n1,n2,n3)*_q(n4,1)
                 - uc2(n2,n3) * _q(n1+n4,2)
                 - uc2(n1,n3) * _q(n2+n4,2)
                 - uc2(n1,n2) * _q(n3+n4,2)
-                + c2 * uc1(n3) * _q(n1+n2+n4,3)
-                + c2 * uc1(n2) * _q(n1+n3+n4,3)
-                + c2 * uc1(n1) * _q(n2+n3+n4,3)
-                - c6 * _q(n1+n2+n3+n4,4));
+                + k2 * uc1(n3) * _q(n1+n2+n4,3)
+                + k2 * uc1(n2) * _q(n1+n3+n4,3)
+                + k2 * uc1(n1) * _q(n2+n3+n4,3)
+                - k6 * _q(n1+n2+n3+n4,4));
       }
       /**
        * @f[
@@ -177,25 +177,25 @@ namespace correlations {
                   const Harmonic n4,
                   const Harmonic n5) const
       {
-        const Real c2  = 2;
-        const Real c6  = 6;
-        const Real c24 = 24;
+        const Real k2  = 2;
+        const Real k6  = 6;
+        const Real k24 = 24;
         return (uc4(n1,n2,n3,n4) * _q(n5, 1)
                 - uc3(n2,n3,n4) * _q(n1+n5,2)
                 - uc3(n1,n3,n4) * _q(n2+n5,2)
                 - uc3(n1,n2,n4) * _q(n3+n5,2)
                 - uc3(n1,n2,n3) * _q(n4+n5,2)
-                + c2 * uc2(n3,n4) * _q(n1+n2+n5,3)
-                + c2 * uc2(n2,n4) * _q(n1+n3+n5,3)
-                + c2 * uc2(n1,n4) * _q(n2+n3+n5,3)
-                + c2 * uc2(n2,n3) * _q(n1+n4+n5,3)
-                + c2 * uc2(n1,n3) * _q(n2+n4+n5,3)
-                + c2 * uc2(n1,2)  * _q(n3+n4+n5,3)
-                - c6 * uc1(n4)    * _q(n1+n2+n3+n5,4)
-                - c6 * uc1(n3)    * _q(n1+n2+n4+n5,4)
-                - c6 * uc1(n2)    * _q(n1+n3+n4+n5,4)
-                - c6 * uc1(n1)    * _q(n2+n3+n4+n5,4)
-                + c24 * _q(n1+n2+n3+n4+n5,5));
+                + k2 * uc2(n3,n4) * _q(n1+n2+n5,3)
+                + k2 * uc2(n2,n4) * _q(n1+n3+n5,3)
+                + k2 * uc2(n1,n4) * _q(n2+n3+n5,3)
+                + k2 * uc2(n2,n3) * _q(n1+n4+n5,3)
+                + k2 * uc2(n1,n3) * _q(n2+n4+n5,3)
+                + k2 * uc2(n1,2)  * _q(n3+n4+n5,3)
+                - k6 * uc1(n4)    * _q(n1+n2+n3+n5,4)
+                - k6 * uc1(n3)    * _q(n1+n2+n4+n5,4)
+                - k6 * uc1(n2)    * _q(n1+n3+n4+n5,4)
+                - k6 * uc1(n1)    * _q(n2+n3+n4+n5,4)
+                + k24 * _q(n1+n2+n3+n4+n5,5));
       }
       /* @} */
       /**

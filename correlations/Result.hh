@@ -32,25 +32,25 @@ namespace correlations {
   /**
    * Structure to hold and accummulate the results in
    *
-   * @code
-   * correlations::QVector q;
-   * correlations::Result  r;
-   * correlations::Correlator c = ...;
-   * correlations::HarmonicVector h(n);
-   *
-   * while (moreEvents) {
-   *
-   *   while (moreObservations) {
-   *     correlations::Real phi    = NextObservation();
-   *     correlations::Real Weight = GetWeight(phi);
-   *
-   *     q.fill(phi, weight);
-   *   }
-   *
-   *   r += c.calculate(h);
-   * }
-   * std::cout << r.eval() << std::endl;
-   * @endcode
+   @code
+   correlations::QVector q;
+   correlations::Result  r;
+   correlations::Correlator c = ...;
+   correlations::HarmonicVector h(n);
+   
+   while (moreEvents) {
+   
+     while (moreObservations) {
+       correlations::Real phi    = NextObservation();
+       correlations::Real Weight = GetWeight(phi);
+   
+       q.fill(phi, weight);
+     }
+   
+     r += c.calculate(h);
+   }
+   std::cout << r.eval() << std::endl;
+   @endcode
    * @headerfile ""  <correlations/Result.hh>
    */
   struct Result

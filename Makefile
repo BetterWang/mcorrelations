@@ -22,7 +22,8 @@ ifneq ($(USE7),)
 CPPFLAGS	+= -DCORRELATIONS_CLOSED_ENABLE_U7
 endif 
 LD		:= g++ 
-LDFLAGS		:= -Wl,--no-as-needed -lrt
+# LDFLAGS		:= -Wl,--no-as-needed -lrt
+LDFLAGS		:= -lrt
 HEADERS		:= correlations/Correlator.hh			\
 		   correlations/FromQVector.hh			\
 		   correlations/QVector.hh			\
@@ -183,7 +184,7 @@ distcheck:dist
 upload:distcheck doc
 	ssh top.nbi.dk rm -rf ~/public_html/m$(NAME)
 	mv html m$(NAME)
-	tar czf - m$(NAME) | ssh top.nbi.dk "tar xzf - -C ~/public_html/"
+	tar czf - m$(NAME) | ssh top.nbi.dk "tar xzvf - -C ~/public_html/"
 	scp $(NAME)-$(VERSION).tar.gz top.nbi.dk:~/public_html/m$(NAME)/
 	mv m$(NAME) html
 

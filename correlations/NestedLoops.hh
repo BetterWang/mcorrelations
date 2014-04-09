@@ -32,27 +32,27 @@ namespace correlations {
   /**
    * Structure to calculate the correlator using nested loops
    *
-   * @code
-   * correlations::Result  r;
-   * correlations::RealVector phis;
-   * correlations::RealVector weights;
-   * correlations::Correlator c = new correlations::NestedLoops(phis,weights);
-   * correlations::HarmonicVector h(n);
-   *
-   * while (moreEvents) {
-   *
-   *   while (moreObservations) {
-   *     correlations::Real phi    = NextObservation();
-   *     correlations::Real weight = GetWeight(phi);
-   *
-   *     phis.push_back(phi);
-   *     weights.push_back(weight);
-   *   }
-   *
-   *   r += c.calculate(h);
-   * }
-   * std::cout << r.eval() << std::endl;
-   * @endcode
+   @code
+   correlations::Result         r;
+   correlations::RealVector     phis;
+   correlations::RealVector     weights;
+   correlations::NestedLoops    c(phis,weights);
+   correlations::HarmonicVector h(n);
+   
+   while (moreEvents) {
+   
+     while (moreObservations) {
+       correlations::Real phi    = NextObservation();
+       correlations::Real weight = GetWeight(phi);
+   
+       phis.push_back(phi);
+       weights.push_back(weight);
+     }
+   
+     r += c.calculate(h);
+   }
+   std::cout << r.eval() << std::endl;
+   @endcode
    * @headerfile ""  <correlations/NestedLoops.hh>
    */
   struct NestedLoops : public Correlator
