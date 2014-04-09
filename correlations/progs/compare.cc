@@ -3,7 +3,7 @@
  * @author Christian Holm Christensen <cholm@nbi.dk>
  * @date   Thu Oct 24 23:45:40 2013
  *
- * @brief  An example
+ * @brief  Compare outputs
  */
 /*
  * Multi-particle correlations 

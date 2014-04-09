@@ -54,6 +54,12 @@
  * <pre class="shell">
  * svn co https://svn.cern.ch/reps/alicefmd/mcorrelations/trunk mcorrelations</pre>
  *
+ * If the above does not work, try 
+ *
+ * <pre class="shell">
+ * svn co http://svnweb.cern.ch/guest/alicefmd/mcorrelations/trunk mcorrelations</pre>
+ *
+ *
  * @subsection download Download
  *
  * Alternatively, the code can be downloaded from
@@ -65,6 +71,8 @@
  * That is, all code is 'inline'.  That means that there is no need to
  * compile a library or the like first.
  *
+ * @subsection usage_other Using in Another Project 
+ * 
  * To use the code in some other project located at say
  * @c /some/directory do
  *
@@ -72,14 +80,18 @@
  *
  * and then make sure that @c /some/directory is in the include path
  * of the compiler (e.g., <tt>-I/some/directory</tt>).  One can also
- * copy the sub-directory <tt>correlations</tt> to the project in question
- * and use it directly from there (please observe the license conditions).
+ * copy the sub-directory <tt>correlations</tt> to the project in
+ * question and use it directly from there (please observe the license
+ * conditions).
  *
- * @note Concerning compatibility.  The code it self is portable as it is,
- * and only uses ISO C++98/C99.  However, the code and in particular the
- * build system captured in the top-level Makefile have only been tested on
- * GNU/Linux with relatively new versions of GCC.  To build the tests on other
- * platforms it may require a bit of tweaking on the users behalf.
+ * @note Concerning compatibility.  The code it self is portable as it
+ * is, and only uses ISO C++98/C99.  However, the code and in
+ * particular the build system captured in the top-level Makefile have
+ * only been tested on GNU/Linux with relatively new versions of GCC.
+ * To build the tests on other platforms it may require a bit of
+ * tweaking on the users behalf.
+ *
+ * - 
  *
  * @note When using the code with <a href="root.cern.ch">ROOT</a> it
  * is important that the code is (at least) <a
@@ -203,11 +215,11 @@
  * Both algorithms are interfaced in the same way through the member
  * function correlations::Correlator::calculate.
  *
- * The member function  correlations::Correlator::calculate returns a
- * correlations::Result object, which contains the sum and
- * the sum of the weights.  The sum and the sum of weights can be
- * accumulated in an object of this time, and the final event average
- * result can be extracted using correlations::Result::eval.
+ * The member function correlations::Correlator::calculate returns a
+ * correlations::Result object, which contains the sum and the sum of
+ * the weights.  The sum and the sum of weights can be accumulated in
+ * an object of this time, and the final event average result can be
+ * extracted using correlations::Result::eval.
  *
  * @subsection recursion Recursive vs. closed-form
  *
@@ -219,10 +231,11 @@
  *   simplify the expression, and has the added feature that it can
  *   calculate any order correlator - provided enough computing time
  *   and memory.
- * - correlations::closed::FromQVector which uses closed-form expression
- *   for the correlators.  This means that we are limited to the order
- *   for which we have generated these closed forms.  Note, one can
- *   use the program print.cc to generate this, should it be needed.
+ * - correlations::closed::FromQVector which uses closed-form
+ *   expression for the correlators.  This means that we are limited
+ *   to the order for which we have generated these closed forms.
+ *   Note, one can use the program print.cc to generate this, should
+ *   it be needed.
  *
  * Similarly to correlations::recursive::FromQVector, there is a
  * sub-class of correlations::NestedLoops -
@@ -275,6 +288,8 @@
  *
  * The code is distributed under the GNU General Public License
  * version 3.  See the page @ref license
+ *
+ * @example Simple.C A simple example 
  *
  * @example write.cc A simple program that creates a data file using
  * correlations::test::Distribution correlations::test::Weights and

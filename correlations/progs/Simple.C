@@ -1,9 +1,17 @@
 /*
- * This script should be AcLic compiled - i.e.,
+ * This script can be AcLic compiled - i.e.,
  *
- *   Root> .L test/Test.C++
+ *   Root> .L correlations/progs/Simple.C++
  *
- * due to the nested loops
+ * If not, then the library headers will be.  
+ */
+/**
+ * @file   Simple.C
+ * @author Christian Holm Christensen <cholm@nbi.dk>
+ * @date   Wed Apr  9 10:11:39 2014
+ * 
+ * @brief A simple ROOT example calculating n-particle correlations
+ * for a single event with 11 particles.
  */
 /*
  * Multi-particle correlations 
@@ -34,6 +42,19 @@
 # include <vector>
 #endif
 
+/** 
+ * A simple example.  This calculates up to the 8-particle correlator
+ * for a single event with 11 particles using weights.  The
+ * correlators are evaluated using 3 methods:
+ *
+ * - correlations::NestedLoops
+ * - correlations::closed::FromQVector 
+ * - correlations::recursive::FromQVector 
+ *
+ * The final results of each correlator, along with the time it took
+ * to evaluate is printed at the end.
+ * 
+ */
 void Simple()
 {
   // --- Options -----------------------------------------------------
@@ -41,24 +62,26 @@ void Simple()
   Bool_t useWeights = true;
 
   // Whether to calculte using nested loops 
-  Bool_t evaluateNestedLoops = true;
+  bool evaluateNestedLoops = true;
 
   // Maximim correlator order 
-  UInt_t maxCorrelator = 6;
+  size_t maxCorrelator = 6;
 
   // --- Data --------------------------------------------------------
   // Number of particles 
-  const Int_t nParticles      = 11;
+  const size_t nParticles      = 11;
 
   // Azimuthal angles:
-  Double_t angles[nParticles]  = { 6.28156, 1.02359, 1.77574, 5.95144, 
-				   1.45554, 3.04718, 6.01601, 4.67661,
-				   3.39319, 4.64926, 2.49226 };
+  double angles[nParticles]  = { 6.28156, 1.02359, 1.77574, 
+				 5.95144, 1.45554, 3.04718, 
+				 6.01601, 4.67661, 3.39319, 
+				 4.64926, 2.49226 };
   
   // Particle weights:
-  Double_t weights[nParticles] = { 1.14393, 0.90291, 0.93739, 1.12879,
-				   0.92277, 0.99567, 1.13175, 1.07036,
-				   1.01153, 1.06911, 1.11211 };
+  double weights[nParticles] = { 1.14393, 0.90291, 0.93739, 
+				 1.12879, 0.92277, 0.99567, 
+				 1.13175, 1.07036, 1.01153, 
+				 1.06911, 1.11211 };
 
   // --- Load code ---------------------------------------------------
 #ifdef __CINT__
@@ -79,6 +102,8 @@ void Simple()
   gROOT->LoadMacro("correlations/recursive/_FromQVector.hh+");
   gROOT->LoadMacro("correlations/closed/FromQVector.hh+");
   gROOT->LoadMacro("correlations/test/Stopwatch.hh+");
+  // Remove work-around temporary 
+  gSystem->Unlink("correlations/recursive/_FromQVector.hh");
 #endif
 
 
@@ -109,7 +134,7 @@ void Simple()
 
   // --- Particle loop -----------------------------------------------
   // Calculate Q-vector 
-  for (Int_t iParticle = 0; iParticle < nParticles; iParticle++) { 
+  for (size_t iParticle = 0; iParticle < nParticles; iParticle++) { 
     ap[iParticle] = angles[iParticle];
     aw[iParticle] = weights[iParticle];
     q.fill(angles[iParticle], weights[iParticle]);
@@ -117,7 +142,7 @@ void Simple()
 
   // --- Calculation loop --------------------------------------------
   correlations::test::Stopwatch* s = correlations::test::Stopwatch::create();
-  for (UInt_t i = 2; i <= maxCorrelator; i++) {
+  for (correlations::Size i = 2; i <= maxCorrelator; i++) {
     printf("%d-particle correlator:\n", i);
     
     correlations::Correlator** p = correlators;

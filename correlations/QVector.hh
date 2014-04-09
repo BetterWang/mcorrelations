@@ -56,8 +56,8 @@ namespace correlations {
      * Constructor - creates a QVector with the specified maximum
      * harmonic order and maximum power of the harmonics
      *
-     * @param maxN       Maximum harmonic order
-     * @param maxP       Maximum power
+     * @param mN         Maximum harmonic order
+     * @param mP         Maximum power
      * @param useWeights Whether to use weights or not
      *
      */
@@ -81,8 +81,8 @@ namespace correlations {
     /**
      * Resize the QVector - note this clears all content
      *
-     * @param maxN New maximum harmonic
-     * @param maxP New maximum power
+     * @param mN New maximum harmonic
+     * @param mP New maximum power
      */
     void resize(Size mN, Size mP)
     {

@@ -5,6 +5,13 @@
  *
  * due to the nested loops
  */
+/**
+ * @file   Analyze.C
+ * @author Christian Holm Christensen <cholm@nbi.dk>
+ * @date   Wed Apr  9 10:18:10 2014
+ * 
+ * @brief  A ROOT script example. 
+ */
 /*
  * Multi-particle correlations 
  * Copyright (C) 2013 K.Gulbrandsen, A.Bilandzic, C.H. Christensen.
@@ -79,10 +86,10 @@ Analyze(const TString& mode="CLOSED",
   gROOT->LoadMacro("correlations/Types.hh++");
   gROOT->LoadMacro("correlations/Result.hh++");
   gROOT->LoadMacro("correlations/QVector.hh++");
-  gROOT->LoadMacro("correlations/recursive/Cumulant.hh++");
-  gROOT->LoadMacro("correlations/closed/Cumulant.hh++");
+  gROOT->LoadMacro("correlations/recursive/FromQVector.hh++");
+  gROOT->LoadMacro("correlations/recurrence/FromQVector.hh++");
+  gROOT->LoadMacro("correlations/closed/FromQVector.hh++");
   gROOT->LoadMacro("correlations/test/ReadData.hh++");
-
 #endif
   // --- Setup of harmonics, etc -------------------------------------
   gRandom->SetSeed(54321);

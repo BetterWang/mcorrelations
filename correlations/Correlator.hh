@@ -57,6 +57,7 @@ namespace correlations {
    std::cout << r.eval() << std::endl;
    @endcode
    * @headerfile ""  <correlations/Correlator.hh>
+   *
    */
   struct Correlator
   {

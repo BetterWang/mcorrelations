@@ -1,8 +1,9 @@
-/*
- * Compare.C
- *
- *  Created on: Nov 8, 2013
- *      Author: cholm
+/**
+ * @file   Compare.C
+ * @author Christian Holm Christensen <cholm@nbi.dk>
+ * @date   Wed Apr  9 10:19:47 2014
+ * 
+ * @brief  Compare outputs
  */
 /*
  * Multi-particle correlations 

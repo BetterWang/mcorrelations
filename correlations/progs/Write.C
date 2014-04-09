@@ -1,8 +1,9 @@
-/*
- * Write.C
- *
- *  Created on: Nov 8, 2013
- *      Author: cholm
+/**
+ * @file   Write.C
+ * @author Christian Holm Christensen <cholm@nbi.dk>
+ * @date   Wed Apr  9 10:20:34 2014
+ * 
+ * @brief  Write output data to a ROOT tree
  */
 /*
  * Multi-particle correlations 
@@ -50,9 +51,9 @@ void Write(UShort_t nEvents, UShort_t minN, UShort_t maxN)
 {
   TFile*   out        = TFile::Open("data.root", "RECREATE");
   TTree*   tree       = new TTree("T", "T");
-  TF1*     phiFunc    = new TF1("phiFunc", &func, 0, TMath::TwoPi(), 7);
-  TH1*     weightDist = new TH1D("weights", "Weights", 72, 0, TMath::TwoPi());
-  TH1*     phiDist    = new TH1D("phis", "#phi-#phi_{R}", 72, 0, TMath::TwoPi());
+  TF1*     phiFunc    = new TF1("phiFunc",&func,0,TMath::TwoPi(),7);
+  TH1*     weightDist = new TH1D("weights", "Weights",72,0,TMath::TwoPi());
+  TH1*     phiDist    = new TH1D("phis", "#phi-#phi_{R}", 72,0,TMath::TwoPi());
   TArrayD  phis(0);
   TArrayD  weights(0);
   Double_t phiR = 0;

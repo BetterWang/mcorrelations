@@ -1,5 +1,5 @@
 /**
- * @file   correlations/progs/prog.cc
+ * @file   correlations/progs/analyze.cc
  * @author Christian Holm Christensen <cholm@nbi.dk>
  * @date   Thu Oct 24 23:45:40 2013
  *
@@ -7,7 +7,7 @@
  *
  * The program takes a number of options.  Do 
  * <pre class="shell">
- * ./write -h
+ * ./analyze -h
  * </pre>
  * for information. 
  */
@@ -47,14 +47,14 @@ usage(const char* prog)
   std::cout << "Usage: " << prog << " [OPTIONS]\n\n"
             << "Options:" << std::endl;
 
-  helpline(std::cout, 'h', "",         "This help",                         "");
-  helpline(std::cout, 'v', "",         "Be verbose",                        "false");
-  helpline(std::cout, 'l', "",         "Do not execute nested loops",       "true");
-  helpline(std::cout, 'L', "",         "Do execute nested loops",           "false");
-  helpline(std::cout, 'i', "FILENAME", "Input file name",                   "data.dat");
-  helpline(std::cout, 'o', "FILENAME", "Output file name",                  "MODE.dat");
-  helpline(std::cout, 'n', "MAXH",     "Maximum correlator",                "6");
-  helpline(std::cout, 't', "MODE",     "Which algorithm to use",            "closed");
+  helpline(std::cout, 'h', "",        "This help",                  "");
+  helpline(std::cout, 'v', "",        "Be verbose",                 "false");
+  helpline(std::cout, 'l', "",        "Do not execute nested loops","true");
+  helpline(std::cout, 'L', "",        "Do execute nested loops",    "false");
+  helpline(std::cout, 'i', "FILENAME","Input file name",            "data.dat");
+  helpline(std::cout, 'o', "FILENAME","Output file name",           "MODE.dat");
+  helpline(std::cout, 'n', "MAXH",    "Maximum correlator",         "6");
+  helpline(std::cout, 't', "MODE",    "Which algorithm to use",     "closed");
 }
 
 struct to_upper
