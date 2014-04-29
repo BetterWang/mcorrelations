@@ -42,6 +42,9 @@
  * for any @f$ N@f$ and harmonic orders @f$ h_i@f$ - limited by
  * computing time and available memory.
  *
+ * See also <a href="http://arxiv.org/abs/1312.3572">arXiv:1312.3572
+ * [nucl-ex]<a>.
+ *
  * @section downinst Download and Installation
  *
  * @subsection checkout Checkout from Subversion

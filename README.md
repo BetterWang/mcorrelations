@@ -8,6 +8,10 @@ This code calculates the generic multi-particle correlator
 where the vector `h=h_1,...,h_n` is the harmonics of each particle,
 and `phi_j` is the observations of the azimuth angle.
 
+See also 
+
+    http://arxiv.org/abs/1312.3572
+
 ## Content:
 
 * `cas` - Computer Algebra System files.
