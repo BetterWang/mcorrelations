@@ -49,7 +49,8 @@ PROGS		:= correlations/progs/analyze.cc 		\
 		   correlations/progs/print.cc			\
 		   correlations/progs/Write.C			\
 		   correlations/progs/Analyze.C			\
-		   correlations/progs/Compare.C			
+		   correlations/progs/Compare.C			\
+		   correlations/progs/Simple.C
 DOCS		:= doc/Mainpage.hh				\
 		   doc/License.hh				\
 		   doc/Test.C					\
@@ -58,8 +59,18 @@ DOCS		:= doc/Mainpage.hh				\
 EXEC		:= $(notdir $(basename $(PROGS)))
 EXEC_ARGS	:= -L
 EXTRA		:= Makefile 				\
+		   README.md				\
 		   doc/Doxyfile.in 			\
-		   data/ante.mc
+		   data/ante.mc				\
+		   cas/Expand.nb			\
+		   cas/P2correlator.nb			\
+		   cas/P3correlator.nb			\
+		   cas/P4correlator.nb			\
+		   cas/P5correlator.nb			\
+		   cas/P6correlator.nb			\
+		   cas/P7correlator.nb			\
+		   cas/P8correlator.nb			
+
 
 %.o:correlations/progs/%.cc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< 
@@ -120,6 +131,9 @@ Test:	recursive.root recurrence.root closed.root Compare
 	./Compare -1 recurrence -2 closed -B
 	./Compare -1 recursive  -2 closed -B
 
+Simple: correlations/progs/Simple.C
+	root -l -b -q $< 
+
 retest:
 	rm -f *.dat 
 	$(MAKE) test
@@ -155,6 +169,12 @@ compare.o:	correlations/progs/compare.cc 		\
 		correlations/test/Printer.hh		
 print:		print.o
 
+algorithmsTiming.png: DrawArticlePlot.C recursive.root recurrence.root closed.root
+	root -l -b -q $< 
+
+algorithmsTiming.eps algorithmsTiming.pdf:algorithmsTiming.png
+	if test -f $@ ; then : ; else rm $< ; $(MAKE) $< ;fi
+
 doc/Doxyfile:	doc/Doxyfile.in 
 	sed -e 's/@PACKAGE@/${PACKAGE}/' -e 's/@VERSION@/${VERSION}/' < $< > $@
 
@@ -164,21 +184,31 @@ html/index.html:doc/Doxyfile $(HEADERS) $(TESTS) $(PROGS) $(DOCS)
 
 clean:
 	find . -name "*~" -or -name "*_C.*" -or -name "*_hh.*" | xargs rm -f
-	rm -f core.* TAGS *.o *.png *.vlg *.dat  *.root Test
+	rm -f core.* TAGS *.o *.png *.vlg *.dat  *.root Test test.C
 	rm -f analyze compare write print Analyze Write Compare doc/Doxyfile
-	rm -rf html $(NAME)-$(VERSION) $(NAME)-$(VERSION).tar.gz TAGS
+	rm -f algorithmsTiming.eps algorithmsTiming.png algorithmsTiming.pdf
+	rm -rf html TAGS $(NAME)-$(VERSION) 
 
-dist:
+distclean: clean 
+	rm -rf $(NAME)-$(VERSION).tar.gz $(NAME)-$(VERSION).zip
+
+distdir:
 	mkdir -p $(NAME)-$(VERSION)
 	$(foreach f, $(HEADERS) $(TESTS) $(EXTRA) $(PROGS) $(DOCS), \
 	  mkdir -p $(NAME)-$(VERSION)/$(dir $(f)); \
 	  cp $(f) $(NAME)-$(VERSION)/$(f);)
+
+dist:	distdir
 	tar -czvf $(NAME)-$(VERSION).tar.gz $(NAME)-$(VERSION)
+	rm -rf $(NAME)-$(VERSION)
+
+zdist:	distdir
+	zip -r -l $(NAME)-$(VERSION).zip $(NAME)-$(VERSION)
 	rm -rf $(NAME)-$(VERSION)
 
 distcheck:dist
 	tar -xzf $(NAME)-$(VERSION).tar.gz
-	(cd $(NAME)-$(VERSION) && $(MAKE) test doc)
+	(cd $(NAME)-$(VERSION) && $(MAKE) test Test Simple doc dist)
 	rm -rf $(NAME)-$(VERSION)
 
 upload:distcheck doc

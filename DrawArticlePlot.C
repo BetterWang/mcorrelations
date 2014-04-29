@@ -51,7 +51,7 @@ void SetAttr(TProfile* p, Int_t color, Int_t fill, Int_t marker)
 }
 
 void
-DrawArticlePlot()
+DrawArticlePlot(Bool_t noSub=true)
 {
   TProfile* closed     = GetTiming("closed.root");
   TProfile* recurrence = GetTiming("recurrence.root");
@@ -65,8 +65,11 @@ DrawArticlePlot()
   c->SetLogy();
   gStyle->SetOptTitle(0);
   closed->SetTitle("Expanded");
+  closed->SetName("closed");
   recurrence->SetTitle("Recurrence");
+  recurrence->SetName("recurrence");
   recursive->SetTitle("Recursive");
+  recursive->SetName("recursive");
 
   SetAttr(closed, kRed+2, 3004, 20);
   SetAttr(recurrence, kGreen+2, 3005, 21);
@@ -74,10 +77,16 @@ DrawArticlePlot()
 
   TAxis* xAxis = closed->GetXaxis();
   for (Int_t i=1; i <= xAxis->GetNbins(); i++) {
-    TString sub;
-    if (i == 1) sub = "n_{1},n_{2}";
-    else        sub = Form("n_{1},#3dots,n_{%d}", i+1);
-    TString lab(Form("#LT%d#GT_{%s}", i+1, sub.Data()));
+    TString lab;
+    if (noSub)  {
+      lab = Form("#LT#LT%d#GT#GT", i+1);
+    }
+    else  {
+      TString sub;
+      if (i == 1) sub = "n_{1},n_{2}";
+      else        sub = Form("n_{1},#3dots,n_{%d}", i+1);
+      lab = Form("#LT%d#GT_{%s}", i+1, sub.Data());
+    }
     xAxis->SetBinLabel(i, lab);
     recursive->GetXaxis()->SetBinLabel(i, lab);
     recurrence->GetXaxis()->SetBinLabel(i, lab);
@@ -110,7 +119,9 @@ DrawArticlePlot()
   c->cd();
 
   c->SaveAs("algorithmsTiming.png");
-  c->SaveAs("algorithmsTiming.C");
+  c->SaveAs("algorithmsTiming.eps");
+  c->SaveAs("algorithmsTiming.pdf");
+  c->SaveAs("test.C");
 }
 
   

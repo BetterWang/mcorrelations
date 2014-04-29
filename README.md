@@ -24,6 +24,13 @@ To check out, do (CERN users)
 For non-CERN users do
 
     svn co http://svnweb.cern.ch/guest/alicefmd/mcorrelations/trunk mcorrelations
+
+Alternatively download from 
+
+    http://www.nbi.dk/~cholm/mcorrelations/
+
+and extract. 
+
 To build, do
 
     cd mcorrelations

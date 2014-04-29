@@ -31,6 +31,7 @@
 # include <TLatex.h>
 # include <TLegend.h>
 # include <TLegendEntry.h>
+# include <TClass.h>
 #else
 class TFile;
 class TH1;
@@ -151,12 +152,13 @@ void DrawTwoInPad(TVirtualPad* p,
   r->SetMarkerColor(h1->GetFillColor()+1);
   r->SetFillStyle(3007);
   r->SetYTitle(Form("#frac{%s}{%s}", s1.Data(), s2.Data()));
-  r->SetDirectory(0);
 
   // r->Add(h2, -1);
   // r->Divide(h1);
-  r->GetSumw2()->Set(0); // r->Sumw2(false);
-  h2->GetSumw2()->Set(0); // h2->Sumw2(false);
+  if (!r->IsA()->InheritsFrom(TProfile::Class())) {
+    r->GetSumw2()->Set(0); // r->Sumw2(false);
+    h2->GetSumw2()->Set(0); // h2->Sumw2(false);
+  }
   r->Divide(h2);
   Printf("%s", r->GetName());
   for (UShort_t bin = 1; bin <= r->GetNbinsX(); bin++) {
